@@ -3,139 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Repair Invoice Generator (Official)</title>
-    <!-- โหลดฟอนต์ Prompt -->
+    <title>T&K Repair Invoice System Ultimate</title>
+    <!-- Google Fonts (Prompt) -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- โหลดไลบรารี html2canvas เพื่อเซฟภาพบิล -->
+    <!-- html2canvas ประมวลผลรูปภาพความละเอียดสูง -->
     <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
-        body { background-color: #060b13; color: #e2e8f0; padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background-color: #030712; color: #f1f5f9; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent), radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.03), transparent); }
         
         .w-full-md { width: 100%; max-width: 440px; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-        .neon-blue { border-color: rgba(0, 229, 255, 0.3); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); }
         
-        /* ฟอร์มกรอกข้อมูลสำหรับช่าง */
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
-        .form-input { width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; color: #fff; font-size: 14px; outline: none; }
-        .form-input:focus { border-color: #00E5FF; }
-        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; }
+        /* ดีไซน์หน้าต่างควบคุมสไตล์ยานอวกาศ (Cyberpunk Control Panel) */
+        .glass-panel { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 24px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.1); position: relative; overflow: hidden; }
+        .glass-panel::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(#00E5FF, #3b82f6); }
         
-        /* ปุ่มจัดการระบบ */
-        .btn-update { width: 100%; background: linear-gradient(90deg, #00E5FF, #2563eb); color: #000; font-weight: 700; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px; transition: transform 0.1s; }
+        .form-title { font-size: 18px; font-weight: 700; color: #00E5FF; margin-bottom: 16px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 500; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* ช่องกรอกข้อมูลสุดล้ำ */
+        .form-input { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 12px; padding: 12px; color: #fff; font-size: 14px; outline: none; transition: all 0.25s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .form-input:focus { border-color: #00E5FF; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2), inset 0 2px 4px rgba(0,0,0,0.2); background: rgba(15, 23, 42, 0.9); }
+        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 12px; }
+        
+        /* ปุ่มแอคชันเรืองแสงตอบสนองไว */
+        .btn-update { width: 100%; background: linear-gradient(90deg, #00E5FF, #3b82f6); color: #030712; font-weight: 700; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; margin-top: 8px; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); }
+        .btn-update:hover { filter: brightness(1.1); box-shadow: 0 4px 20px rgba(0, 229, 255, 0.5); }
         .btn-update:active { transform: scale(0.98); }
-        .btn-export { width: 100%; background: linear-gradient(90deg, #ffd700, #f59e0b); color: #000; font-weight: 800; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.25); text-align: center; margin-top: 15px; margin-bottom: 30px; }
+        
+        .btn-export { width: 100%; background: linear-gradient(90deg, #ffd700, #f59e0b); color: #030712; font-weight: 800; padding: 16px; border: none; border-radius: 16px; cursor: pointer; font-size: 16px; box-shadow: 0 6px 25px rgba(255, 215, 0, 0.3); text-align: center; margin-top: 15px; margin-bottom: 35px; transition: all 0.2s ease; letter-spacing: 0.5px; }
+        .btn-export:hover { filter: brightness(1.1); box-shadow: 0 6px 30px rgba(255, 215, 0, 0.5); }
         .btn-export:active { transform: scale(0.98); }
         
-        /* ดีไซน์โครงสร้างบิลตามกระดาษจริงของร้าน T&K */
-        #invoiceContainer { background: #0b0f19; border: 2px solid #1e293b; border-radius: 16px; padding: 24px; position: relative; }
-        .bill-header { text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; margin-bottom: 14px; }
-        .bill-title { font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #60a5fa, #00E5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
-        .bill-subtitle { font-size: 10px; color: #94a3b8; margin-top: 2px; }
-        .bill-badge { display: inline-block; background: rgba(0, 229, 255, 0.1); color: #00E5FF; font-size: 11px; padding: 3px 12px; border-radius: 9999px; border: 1px solid rgba(0, 229, 255, 0.2); font-weight: 600; margin-top: 6px; }
+        /* โครงสร้างภาพบิลดีไซน์หรูหราพรีเมียม (Premium Metallic Dark Theme) */
+        #invoiceContainer { background: #090d16; border: 2px solid #1e293b; border-radius: 24px; padding: 28px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.6); overflow: hidden; }
+        #invoiceContainer::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.01), transparent); transform: rotate(45deg); pointer-events: none; }
+        
+        .bill-header { text-align: center; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 16px; margin-bottom: 16px; position: relative; }
+        .bill-title { font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #93c5fd, #00E5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,229,255,0.1); }
+        .bill-subtitle { font-size: 10px; color: #94a3b8; margin-top: 4px; font-weight: 500; }
+        .bill-badge { display: inline-block; background: rgba(0, 229, 255, 0.08); color: #00E5FF; font-size: 11px; padding: 4px 16px; border-radius: 9999px; border: 1px solid rgba(0, 229, 255, 0.2); font-weight: 600; margin-top: 10px; }
         
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .text-xs { font-size: 12px; color: #94a3b8; }
-        .text-white { color: #f8fafc; }
+        .text-xs { font-size: 12px; color: #64748b; }
+        .text-white { color: #f8fafc; font-weight: 500; }
         
-        .info-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin-bottom: 14px; font-size: 12px; }
-        .info-line { margin-bottom: 4px; }
-        .info-label { color: #94a3b8; }
-        .divider { border-top: 1px dashed #1e293b; margin: 8px 0; padding-top: 8px; }
+        /* การ์ดแสดงผลข้อมูลสไตล์มินิมอลโมเดิร์น */
+        .info-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(51, 65, 85, 0.4); border-radius: 16px; padding: 14px; margin-bottom: 16px; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .info-line { margin-bottom: 6px; display: flex; align-items: flex-start; }
+        .info-line:last-child { margin-bottom: 0; }
+        .info-label { color: #64748b; width: 95px; flex-shrink: 0; font-weight: 500; }
+        .info-value { color: #e2e8f0; }
+        .divider { border-top: 1px dashed rgba(51, 65, 85, 0.5); margin: 10px 0; padding-top: 10px; }
         
-        .section-title { font-size: 12px; color: #00E5FF; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; padding-left: 2px; }
+        .section-title { font-size: 11px; color: #00E5FF; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; padding-left: 2px; display: flex; align-items: center; gap: 4px; }
         
-        /* ตารางแสดงวัสดุอะไหล่ 10 ช่องตามกระดาษจริง */
-        .part-list-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 6px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; border: 1px solid #1e293b; margin-bottom: 14px; font-size: 11px; color: #cbd5e1; }
-        .part-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* ตารางสรุปอะไหล่ระเบียบเนี๊ยบ */
+        .part-list-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 8px 16px; background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 14px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 16px; font-size: 11px; color: #64748b; }
+        .part-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 2px 0; }
+        .part-item.active { color: #e2e8f0; font-weight: 400; }
         
-        .total-box { background: rgba(255, 215, 0, 0.03); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 0 15px rgba(255, 215, 0, 0.05); }
+        /* กล่องยอดเงินพรีเมียม */
+        .total-box { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(217, 119, 6, 0.05)); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.05); }
         .total-label { font-size: 13px; font-weight: 600; color: #fbbf24; }
-        .total-amount { font-size: 20px; color: #fbbf24; font-weight: 700; }
+        .total-amount { font-size: 20px; color: #fbbf24; font-weight: 700; text-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
         
-        .sign-section { display: grid; grid-template-cols: 1fr 1fr; gap: 16px; text-align: center; font-size: 11px; border-bottom: 1px solid #1e293b; padding-bottom: 14px; margin-bottom: 14px; }
-        .sign-title { color: #94a3b8; margin-bottom: 4px; }
-        .sign-space { height: 40px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 15px; }
+        /* โซนลายเซ็น */
+        .sign-section { display: grid; grid-template-cols: 1fr 1fr; gap: 20px; text-align: center; font-size: 11px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 16px; margin-bottom: 16px; }
+        .sign-title { color: #64748b; margin-bottom: 6px; font-weight: 500; }
+        .sign-space { height: 45px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 16px; font-weight: 500; }
         
-        .warranty-box { font-size: 10px; color: #94a3b8; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; border: 1px solid #1e293b; margin-bottom: 16px; line-height: 1.5; }
+        .warranty-box { font-size: 10px; color: #94a3b8; background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 20px; line-height: 1.6; }
         
         .footer-section { display: flex; justify-content: space-between; align-items: center; }
-        .footer-contact { font-size: 10px; color: #94a3b8; line-height: 1.5; }
-        .footer-contact-title { color: #cbd5e1; font-weight: 500; margin-bottom: 2px; }
+        .footer-contact { font-size: 10px; color: #64748b; line-height: 1.6; }
+        .footer-contact-title { color: #94a3b8; font-weight: 600; margin-bottom: 3px; }
         
-        /* สัญลักษณ์ QR Code เวกเตอร์ ป้องกันปัญหา CORS โหลดไม่ขึ้นบน LINE */
-        .qr-mock { width: 65px; height: 65px; border: 1px solid rgba(255, 215, 0, 0.3); padding: 5px; border-radius: 8px; background: #0b0f19; display: flex; flex-direction: column; justify-content: space-between; }
+        /* สัญลักษณ์ QR Code เวกเตอร์หรูหราสีทอง */
+        .qr-mock { width: 68px; height: 68px; border: 1px solid rgba(251, 191, 36, 0.4); padding: 6px; border-radius: 10px; background: #050811; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .qr-row { display: flex; justify-content: space-between; height: 18px; }
-        .qr-block { width: 18px; height: 18px; background: #ffd700; border-radius: 3px; }
-        .qr-dot { width: 8px; height: 8px; background: #ffd700; align-self: center; margin: auto; }
-        .qr-text { font-size: 8px; color: #ffd700; text-align: center; margin-top: 4px; }
+        .qr-block { width: 18px; height: 18px; background: #fbbf24; border-radius: 4px; }
+        .qr-dot { width: 8px; height: 8px; background: #fbbf24; align-self: center; margin: auto; border-radius: 1px; }
+        .qr-text { font-size: 8px; color: #fbbf24; text-align: center; margin-top: 5px; font-weight: 500; }
 
-        /* หน้าจอป๊อปอัพแสดงพรีวิวรูปภาพเพื่อกดบันทึกในแอป LINE ได้ง่ายๆ */
-        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
-        .preview-img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 0 30px rgba(0,229,255,0.3); }
-        .preview-close { margin-top: 15px; background: #ef4444; color: white; padding: 10px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        /* หน้าต่างพรีวิวเต็มจอเพื่อเซฟบน LINE */
+        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 24px; backdrop-filter: blur(8px); }
+        .preview-img { max-width: 100%; max-height: 78vh; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 229, 255, 0.25); border: 1px solid rgba(255,255,255,0.1); }
+        .preview-close { margin-top: 18px; background: #ef4444; color: white; padding: 12px 30px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
     </style>
 </head>
 <body>
 
     <!-- 1. ส่วนควบคุมฟอร์มสำหรับช่างกรอกข้อมูล -->
-    <div class="w-full-md glass-panel neon-blue">
-        <h2 style="font-size: 16px; font-weight: 700; color: #00E5FF; margin-bottom: 12px;">📋 ฟอร์มใบแจ้งซ่อมตามเอกสารจริงร้าน T&K</h2>
+    <div class="w-full-md glass-panel">
+        <div class="form-title">⚙️ แผงควบคุมระบบใบแจ้งซ่อม T&K</div>
         
         <div class="grid-2">
             <div class="form-group">
                 <label>ชื่อลูกค้า</label>
-                <input type="text" id="inputName" value="" placeholder="กรุณากรอกชื่อลูกค้า" class="form-input">
+                <input type="text" id="inputName" value="" placeholder="กรอกชื่อลูกค้า" class="form-input">
             </div>
             <div class="form-group">
                 <label>เบอร์โทรศัพท์</label>
-                <input type="text" id="inputPhone" value="" placeholder="กรุณากรอกเบอร์โทร" class="form-input">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>ที่อยู่หน้างาน</label>
-            <input type="text" id="inputAddress" value="" placeholder="กรุณากรอกที่อยู่" class="form-input">
-        </div>
-        <div class="grid-2">
-            <div class="form-group">
-                <label>หมวดหมู่หลัก (เช่น ไฟฟ้า/แอร์/คอมฯ)</label>
-                <input type="text" id="inputMainCat" value="เครื่องใช้ไฟฟ้า / ระบบความเย็น" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>ประเภท / ยี่ห้อ / รุ่น</label>
-                <input type="text" id="inputBrandModel" value="" placeholder="เช่น แอร์ LG รุ่น Inverter" class="form-input">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>ลักษณะการชำรุด / ปัญหาที่พบ</label>
-            <input type="text" id="inputSymptom" value="" placeholder="เช่น เปิดไม่ติด คอมเพรสเซอร์ไม่ทำงาน" class="form-input">
-        </div>
-        <div class="form-group">
-            <label>รายการวัสดุอุปกรณ์ / อะไหล่ที่ใช้เปลี่ยน (พิมพ์ข้อความคั่นด้วยเครื่องหมายจุลภาค , )</label>
-            <textarea id="inputParts" class="form-input" style="height: 65px; resize: none;" placeholder="เปลี่ยนบอร์ดหลัก, เติมน้ำยา R32, ล้างทำความสะอาด"></textarea>
-        </div>
-        <div class="grid-2">
-            <div class="form-group">
-                <label>รวมราคาค่าแรงและอุปกรณ์ (บาท)</label>
-                <input type="number" id="inputTotal" value="0" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>ชื่อผู้แจ้งซ่อม (ลูกค้า)</label>
-                <input type="text" id="inputCustomerSign" value="" placeholder="พิมพ์ชื่อเพื่อเซ็นดิจิทัล" class="form-input">
-            </div>
-        </div>
-        <button onclick="updateInvoice()" class="btn-update">🔄 อัปเดตข้อมูลลงบิล</button>
-    </div>
-
-    <!-- 2. ส่วนของตัวบิลสไตล์โมเดิร์นวิบวับที่จะโดนครอปเซฟเป็นรูปภาพ -->
-    <div id="invoiceContainer" class="w-full-md">
-        <div class="bill-header">
-            <h1 class="bill-title">⚡ T&K ELECTRICAL</h1>
-            <p class="bill-subtitle">ศูนย์บริการซ่อมแซมติดตั้งครบวงจร Tel. 0636718151</p>
-            <div class="bill-badge">ใบแจ้งซ่อม / ติดตั้งอุปกรณ์</div>
-        </div>
-
-        <div class="flex-between text-xs" style="margin-bottom: 12px; padding: 0 4px;">
-            
+                
