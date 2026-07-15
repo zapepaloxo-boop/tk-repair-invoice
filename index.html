@@ -9,34 +9,33 @@
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #0b1329; color: #f1f5f9; line-height: 1.5; padding: 20px 10px; }
         .container { max-width: 1000px; margin: 0 auto; width: 100%; }
         header { text-align: center; margin: 10px 0 30px 0; }
-        .header-card { background-color: #1c2541; padding: 0 0 25px 0; border-radius: 16px; border: 1px solid #38bdf8; max-width: 550px; margin: 0 auto; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-        .banner-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 2px solid #38bdf8; }
-        .header-content { padding: 20px 15px 0 15px; }
+        .header-card { background-color: #1c2541; padding: 25px 15px; border-radius: 16px; border: 1px solid #38bdf8; max-width: 550px; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+        .logo-box { width: 50px; height: 50px; background-color: #38bdf8; border-radius: 12px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold; }
         h1 { font-size: 20px; color: #ffffff; margin-bottom: 4px; font-weight: bold; }
         .subtitle { color: #38bdf8; font-size: 12px; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px; }
         .tagline { color: #94a3b8; font-size: 12px; }
         .section-title { text-align: center; color: #38bdf8; font-size: 18px; margin: 35px 0 20px 0; font-weight: bold; }
+        
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .card { background-color: #1c2541; border-radius: 12px; border: 1px solid #1e293b; text-align: center; overflow: hidden; display: flex; flex-direction: column; }
-        .card-img { width: 100%; height: 110px; object-fit: cover; border-bottom: 1px solid #1e293b; }
-        .card-body { padding: 15px 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card { background-color: #1c2541; border-radius: 12px; border: 1px solid #1e293b; padding: 20px 12px; text-align: center; }
         .card h3 { font-size: 14px; color: #ffffff; margin-bottom: 6px; font-weight: bold; }
         .card p { font-size: 11px; color: #94a3b8; }
         .brands { font-size: 10px; color: #7dd3fc; margin-top: 10px; padding-top: 8px; border-top: 1px solid #1e293b; }
         
+        /* สไตล์กล่องฟอร์มแจ้งซ่อมเวอร์ชันเสถียรภาพสูง */
         .form-box { max-width: 500px; margin: 0 auto 40px auto; background-color: #1c2541; padding: 25px 20px; border-radius: 16px; border: 1px solid #38bdf8; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
         .form-box h2 { font-size: 17px; color: #ffffff; margin-bottom: 4px; text-align: center; font-weight: bold; }
         .form-box p { font-size: 12px; color: #94a3b8; margin-bottom: 20px; text-align: center; }
         .fg { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: 500; }
-        input, select, textarea { width: 100%; background-color: #0b1329; border: 1px solid #475569; border-radius: 8px; padding: 10px 12px; color: #ffffff; font-size: 13px; outline: none; }
+        input, select, textarea { width: 100%; background-color: #0b1329; border: 1px solid #475569; border-radius: 8px; padding: 11px 12px; color: #ffffff; font-size: 13px; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #38bdf8; }
         
-        .btn-location { background-color: #1e293b; color: #38bdf8; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; transition: all 0.2s; }
-        .btn-location:hover { background-color: #38bdf8; color: #0b1329; }
-        .location-status { font-size: 11px; color: #10b981; margin-top: 5px; display: none; font-weight: bold; }
+        /* สไตล์แนะนำคำสั่งแชร์แผนที่ */
+        .maps-guide { font-size: 11px; color: #94a3b8; margin-top: 4px; padding: 8px; background-color: #0b1329; border-radius: 6px; border: 1px dashed #475569; }
+        .maps-guide a { color: #38bdf8; text-decoration: underline; font-weight: bold; }
         
-        .btn-line { width: 100%; background-color: #06c755; color: #ffffff; border: none; border-radius: 8px; padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+        .btn-line { width: 100%; background-color: #06c755; color: #ffffff; border: none; border-radius: 8px; padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
         .btn-line:hover { background-color: #05b04b; }
         
         footer { text-align: center; padding: 25px 10px; border-top: 1px solid #1e293b; margin-top: 30px; }
@@ -45,19 +44,16 @@
         .c-btn { display: flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: bold; min-width: 150px; }
         .b-ph { background-color: #0b1329; color: #38bdf8; border: 1px solid #38bdf8; }
         .b-fb { background-color: #1877f2; color: white; }
-        .copyright { font-size: 10px; color: #475569; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <header class="container">
         <div class="header-card">
-            <img class="banner-img" src="https://unsplash.com" alt="Banner">
-            <div class="header-content">
-                <h1>T&K ELECTRICAL APPLIANCE</h1>
-                <div class="subtitle">REPAIR CENTER & ONE-STOP SERVICE</div>
-                <div class="tagline">ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</div>
-            </div>
+            <div class="logo-box">T&K</div>
+            <h1>T&K ELECTRICAL APPLIANCE</h1>
+            <div class="subtitle">REPAIR CENTER & ONE-STOP SERVICE</div>
+            <div class="tagline">ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</div>
         </div>
     </header>
 
@@ -66,48 +62,33 @@
         
         <div class="grid">
             <div class="card">
-                <img class="card-img" src="https://unsplash.com" alt="TV">
-                <div class="card-body">
-                    <h3>TV REPAIR</h3>
-                    <p>ซ่อมทีวี โทรทัศน์ ช่างซ่อมทีวี รับซ่อมถึงบ้าน</p>
-                    <div class="brands">SAMSUNG, LG, SONY, TOSHIBA</div>
-                </div>
+                <h3>TV REPAIR</h3>
+                <p>ซ่อมทีวี โทรทัศน์ ช่างซ่อมทีวี รับซ่อมถึงบ้าน</p>
+                <div class="brands">SAMSUNG, LG, SONY, TOSHIBA</div>
             </div>
             <div class="card">
-                <img class="card-img" src="https://unsplash.com" alt="Washing Machine">
-                <div class="card-body">
-                    <h3>WASHING MACHINE</h3>
-                    <p>ช่างซ่อมเครื่องซักผ้า ล้างถัง ซ่อมเครื่องฝาหน้า/บน</p>
-                    <div class="brands">(LG, SAMSUNG) ทุกยี่ห้อ</div>
-                </div>
+                <h3>WASHING MACHINE</h3>
+                <p>ช่างซ่อมเครื่องซักผ้า ล้างถัง ซ่อมเครื่องฝาหน้า/บน</p>
+                <div class="brands">(LG, SAMSUNG) ทุกยี่ห้อ</div>
             </div>
             <div class="card">
-                <img class="card-img" src="https://unsplash.com" alt="Fridge">
-                <div class="card-body">
-                    <h3>FRIDGE REPAIR</h3>
-                    <p>ซ่อมตู้เย็น รับซ่อมถึงบ้าน บริการล้างตรวจเช็คสภาพ</p>
-                    <div class="brands">SAMSUNG, PANASONIC</div>
-                </div>
+                <h3>FRIDGE REPAIR</h3>
+                <p>ซ่อมตู้เย็น รับซ่อมถึงบ้าน บริการล้างตรวจเช็คสภาพ</p>
+                <div class="brands">SAMSUNG, PANASONIC</div>
             </div>
             <div class="card">
-                <img class="card-img" src="https://unsplash.com" alt="AC">
-                <div class="card-body">
-                    <h3>A/C REPAIR</h3>
-                    <p>ซ่อมแอร์บ้าน ติดตั้ง ช่างล้างแอร์ด่วน เปลี่ยนอะไหล่</p>
-                    <div class="brands">ล้างถอดถาด / ล้างด่วน</div>
-                </div>
+                <h3>A/C REPAIR</h3>
+                <p>ซ่อมแอร์บ้าน ติดตั้ง ช่างล้างแอร์ด่วน เปลี่ยนอะไหล่</p>
+                <div class="brands">ล้างถอดถาด / ล้างด่วน</div>
             </div>
             <div class="card">
-                <img class="card-img" src="https://unsplash.com" alt="Fan">
-                <div class="card-body">
-                    <h3>FAN REPAIR</h3>
-                    <p>ซ่อมพัดลม เปลี่ยนอะไหล่ ตั้งโต๊ะและติดเพดาน</p>
-                    <div class="brands">ทุกรุ่น ทุกอาการเสีย</div>
-                </div>
+                <h3>FAN REPAIR</h3>
+                <p>ซ่อมพัดลม เปลี่ยนอะไหล่ ตั้งโต๊ะและติดเพดาน</p>
+                <div class="brands">ทุกรุ่น ทุกอาการเสีย</div>
             </div>
         </div>
 
-        <!-- ฟอร์มแจ้งซ่อมออนไลน์เชื่อมต่อ LINE OA -->
+        <!-- ฟอร์มแจ้งซ่อมออนไลน์เสถียรภาพสูง -->
         <section class="form-box">
             <h2>นัดหมายแจ้งซ่อมออนไลน์</h2>
             <p>กรอกข้อมูลรายละเอียดเพื่อให้ช่างติดต่อกลับครับ</p>
@@ -142,12 +123,49 @@
                     <input type="text" id="cAddress" required placeholder="บ้านเลขที่, หมู่, ตำบล, อำเภอ">
                 </div>
                 
+                <!-- ช่องวางลิงก์แผนที่ Google Maps แบบพิมพ์/คัดลอกวาง เพื่อความเสถียร 100% -->
                 <div class="fg">
-                    <label>พิกัดแผนที่ (สำหรับให้ช่างนำทาง)</label>
-                    <button type="button" class="btn-location" onclick="getLocation()">📍 กดเพื่อดึงตำแหน่งพิกัดปัจจุบันของคุณ</button>
-                    <div id="locationStatus" class="location-status">✓ บันทึกพิกัดละติจูด/ลองจิจูดเรียบร้อยแล้ว</div>
-                    <input type="hidden" id="cMapsUrl" value="ไม่ได้ระบุพิกัด">
+                    <label>ลิงก์พิกัด Google Maps (ถ้ามี)</label>
+                    <input type="text" id="cMapsUrl" placeholder="วางลิงก์แผนที่บ้านของคุณที่นี่">
+                    <div class="maps-guide">
+                        💡 แนะนำ: <a href="https://google.com" target="_blank">คลิกเปิดแอปแผนที่</a> เพื่อกดแชร์พิกัดบ้าน จากนั้นเลือก "คัดลอกลิงก์" แล้วนำมาวางในช่องนี้ได้เลยครับ
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-line">
                     ส่งข้อมูลแจ้งซ่อมเข้า LINE ร้าน
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="tag">รับในสุรินทร์ ทุกอำเภอ</div>
+            <div class="flex-btns">
+                <a href="tel:0636718151" class="c-btn b-ph">โทร: 063-671-8151</a>
+                <a href="https://lin.ee" target="_blank" class="c-btn b-fb" style="background-color:#06c755;">LINE: @tk_service</a>
+            </div>
+            <div class="copyright">&copy; 2026 T&K Electrical Appliance Repair Center. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('wrapForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var name = document.getElementById('cName').value;
+            var phone = document.getElementById('cPhone').value;
+            var type = document.getElementById('cType').value;
+            var detail = document.getElementById('cDetail').value;
+            var address = document.getElementById('cAddress').value;
+            var mapsUrl = document.getElementById('cMapsUrl').value;
+            
+            if(!mapsUrl || mapsUrl.trim() === "") {
+                mapsUrl = "ไม่ได้ระบุลิงก์พิกัด";
+            }
+            
+            // ใช้ LINE URL Scheme แบบมาตรฐานสากล ทำงานร่วมกับแอปพลิเคชันหลักของไลน์ได้ทันที
+            var textMessage = "🛠️ แจ้งซ่อมออนไลน์ T&K\n" +
+                              "👤 ชื่อลูกค้า: " + name + "\n" +
+                              "📞 เบอร์โทร: " + phone + "\n" +
