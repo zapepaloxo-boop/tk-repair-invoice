@@ -4,96 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&K Electrical Appliance Repair Center</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #0b1329; color: #f1f5f9; line-height: 1.5; padding: 20px 10px; }
-        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
-        header { text-align: center; margin: 10px 0 30px 0; }
-        .header-card { background-color: #1c2541; padding: 25px 15px; border-radius: 16px; border: 1px solid #38bdf8; max-width: 550px; margin: 0 auto; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-        .logo-box { width: 60px; height: 60px; background-color: #38bdf8; border-radius: 50px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; font-weight: bold; }
-        h1 { font-size: 20px; color: #ffffff; margin-bottom: 4px; font-weight: bold; }
-        .subtitle { color: #38bdf8; font-size: 12px; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px; }
-        .tagline { color: #94a3b8; font-size: 12px; }
-        .section-title { text-align: center; color: #38bdf8; font-size: 18px; margin: 35px 0 20px 0; font-weight: bold; }
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background: radial-gradient(circle at top, #0f172a 0%, #020617 100%); 
+            color: #f1f5f9; 
+            line-height: 1.6; 
+            padding: 20px 12px;
+            min-height: 100vh;
+        }
+        .container { max-width: 650px; margin: 0 auto; width: 100%; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .card { background-color: #1c2541; border-radius: 12px; border: 1px solid #1e293b; padding: 20px 12px; text-align: center; }
-        .card h3 { font-size: 14px; color: #ffffff; margin-bottom: 6px; font-weight: bold; }
-        .card p { font-size: 11px; color: #94a3b8; }
-        .brands { font-size: 10px; color: #7dd3fc; margin-top: 10px; padding-top: 8px; border-top: 1px solid #1e293b; }
+        /* โลโก้ใหม่สไตล์พรีเมียมเทค */
+        header { text-align: center; margin: 20px 0 35px 0; }
+        .logo-wrap {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 15px auto;
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo-inner {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .logo-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            filter: blur(10px);
+            opacity: 0.5;
+            z-index: -1;
+        }
         
-        .box-style { max-width: 500px; margin: 0 auto 25px auto; background-color: #1c2541; padding: 25px 20px; border-radius: 16px; border: 1px solid #38bdf8; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-        .box-style h2 { font-size: 17px; color: #ffffff; margin-bottom: 4px; text-align: center; font-weight: bold; }
-        .box-style p { font-size: 12px; color: #94a3b8; margin-bottom: 20px; text-align: center; }
-        .fg { margin-bottom: 15px; text-align: left; }
-        label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: 500; }
-        input, select, textarea { width: 100%; background-color: #0b1329; border: 1px solid #475569; border-radius: 8px; padding: 11px 12px; color: #ffffff; font-size: 13px; outline: none; }
-        input:focus, select:focus, textarea:focus { border-color: #38bdf8; }
+        h1 { font-size: 24px; color: #ffffff; margin-bottom: 4px; font-weight: 700; letter-spacing: 0.5px; }
+        .subtitle { color: #38bdf8; font-size: 13px; font-weight: 600; letter-spacing: 2px; margin-bottom: 6px; text-transform: uppercase; }
+        .tagline { color: #94a3b8; font-size: 13px; }
         
-        .btn-line { width: 100%; background-color: #06c755; color: #ffffff; border: none; border-radius: 8px; padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; }
-        .btn-line:hover { background-color: #05b04b; }
-        .btn-blue { width: 100%; background-color: #38bdf8; color: #0b1329; border: none; border-radius: 8px; padding: 12px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        /* สไตล์กล่องกระจกฝ้าหรูหราแบบโมเดิร์นแอป */
+        .glass-panel { 
+            background: rgba(30, 41, 59, 0.45); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px 24px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(56, 189, 248, 0.25); 
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+            margin-bottom: 30px;
+        }
+        .glass-panel h2 { font-size: 18px; color: #ffffff; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .glass-panel p { font-size: 12px; color: #94a3b8; margin-bottom: 22px; }
         
-        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; margin-top: 10px; }
-        .status-wait { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid #f59e0b; }
-        .status-accept { background-color: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
-        .status-success { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
-        .result-box { display: none; background-color: #0b1329; padding: 15px; border-radius: 10px; border: 1px solid #475569; margin-top: 15px; font-size: 13px; }
+        .fg { margin-bottom: 18px; text-align: left; }
+        label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 6px; font-weight: 500; }
+        input, select, textarea { 
+            width: 100%; 
+            background: rgba(15, 23, 42, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 12px; 
+            padding: 12px 14px; 
+            color: #ffffff; 
+            font-size: 14px; 
+            outline: none;
+            transition: all 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: #38bdf8; background: rgba(15, 23, 42, 0.8); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
         
-        footer { text-align: center; padding: 25px 10px; border-top: 1px solid #1e293b; margin-top: 30px; }
-        .tag { display: inline-block; background-color: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; margin-bottom: 15px; }
-        .flex-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .c-btn { display: flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: bold; min-width: 150px; gap: 5px; }
-        .b-ph { background-color: #0b1329; color: #38bdf8; border: 1px solid #38bdf8; }
-        .b-ln { background-color: #06c755; color: white; }
+        /* ปุ่มส่งงานสากล การันตีเปิดแอป LINE ทันทีชัวร์ 100% */
+        .btn-submit-action { 
+            width: 100%; 
+            background: linear-gradient(135deg, #06c755 0%, #05b04b 100%); 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 12px; 
+            padding: 15px; 
+            font-size: 15px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3);
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn-submit-action:active { transform: scale(0.98); opacity: 0.9; }
+        
+        .btn-search { width: 100%; background: #f59e0b; color: #1e293b; border: none; border-radius: 12px; padding: 13px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        
+        /* สถานะความคืบหน้าของตั๋วใบงาน */
+        .badge { display: inline-block; padding: 6px 14px; border-radius: 50px; font-weight: bold; font-size: 13px; margin-top: 10px; }
+        .st-wait { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid #f59e0b; }
+        .st-accept { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
+        .st-success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+        .output-box { display: none; background: rgba(15, 23, 42, 0.5); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); margin-top: 18px; font-size: 13px; text-align: left; }
+        
+        footer { text-align: center; padding: 30px 10px; border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 40px; }
+        .area-tag { display: inline-block; background: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: bold; margin-bottom: 18px; }
+        .footer-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .footer-link { display: flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: bold; min-width: 160px; gap: 6px; }
+        .f-phone { background: #0f172a; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .f-line { background: #06c755; color: white; }
     </style>
 </head>
 <body>
 
-    <header class="container">
-        <div class="header-card">
-            <div class="logo-box">⚡</div>
-            <h1>T&K ELECTRICAL APPLIANCE</h1>
-            <div class="subtitle">REPAIR CENTER & ONE-STOP SERVICE</div>
-            <div class="tagline">🏠 ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</div>
-        </div>
-    </header>
-
-    <main class="container">
-        <!-- 🔍 ตรวจสอบสถานะงานซ่อมสำหรับลูกค้า -->
-        <section class="box-style" style="border-color: #f59e0b;">
-            <h2>🔍 ตรวจสอบสถานะงานซ่อม</h2>
-            <p>กรอกเลขรหัสงานซ่อมของคุณเพื่อเช็คว่าช่างรับงานแล้วหรือยัง</p>
-            <div class="fg">
-                <input type="text" id="searchId" placeholder="ป้อนรหัส เช่น TK-12345">
-                <button type="button" class="btn-blue" style="background-color: #f59e0b; color: #1c2541; margin-top:10px;" onclick="checkStatus()">🔍 ค้นหาสถานะงาน</button>
+    <div class="container">
+        <header>
+            <div class="logo-wrap">
+                <div class="logo-glow"></div>
+                <div class="logo-inner">T&K</div>
             </div>
-            <div id="searchResult" class="result-box">
-                <div style="font-weight: bold; border-bottom: 1px solid #475569; padding-bottom: 5px; margin-bottom: 5px;">📦 ข้อมูลใบสั่งซ่อม:</div>
-                <div id="resDevice">เครื่องใช้ไฟฟ้า: -</div>
-                <div id="resDetail">อาการเสีย: -</div>
-                <div style="margin-top: 10px;">📊 สถานะปัจจุบัน:</div>
-                <span id="resStatus" class="status-badge status-wait">รอกดรับงาน</span>
+            <h1>T&K ELECTRICAL APPLIANCE</h1>
+            <div class="subtitle">Repair Center & One-Stop Service</div>
+            <div class="tagline">🛠️ ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</div>
+        </header>
+
+        <!-- 🔍 เซกชันเช็คสถานะงานของฝั่งลูกค้า (ไม่เห็นข้อมูลคนอื่น) -->
+        <section class="glass-panel" style="border-color: rgba(245, 158, 11, 0.3);">
+            <h2>🔍 ตรวจสอบสถานะงานซ่อม</h2>
+            <p>กรอกรหัสงานเพื่อติดตามการทำงานของช่างแบบเรียลไทม์</p>
+            <div class="fg">
+                <input type="text" id="inputJobId" placeholder="ป้อนรหัส เช่น TK-12345" style="text-transform: uppercase;">
+                <button type="button" class="btn-search" onclick="searchStatus()">🔎 ค้นหาตำแหน่งงาน</button>
+            </div>
+            <div id="searchView" class="output-box">
+                <div style="font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-bottom: 8px; color: #38bdf8;">📋 ข้อมูลบันทึก:</div>
+                <div id="outDevice" style="margin-bottom: 4px;">เครื่องใช้ไฟฟ้า: -</div>
+                <div id="outDetail" style="margin-bottom: 10px;">รายละเอียด: -</div>
+                <div style="font-weight: 500;">📊 สถานะปัจจุบัน:</div>
+                <span id="outStatus" class="badge st-wait">รอกดรับงาน</span>
             </div>
         </section>
 
-        <!-- 📝 ฟอร์มแจ้งซ่อมออนไลน์สำหรับลูกค้า -->
-        <section class="box-style">
+        <!-- 📝 ฟอร์มจองจองแจ้งซ่อมออนไลน์สำหรับลูกค้า -->
+        <section class="glass-panel">
             <h2>📝 นัดหมายแจ้งซ่อมออนไลน์</h2>
-            <p>กรอกข้อมูลรายละเอียดเพื่อให้ช่างติดต่อกลับครับ</p>
+            <p>กรอกข้อมูลแจ้งงานซ่อมด่วน ระบบจะส่งตรงแชทไลน์ทันที</p>
 
-            <form id="wrapForm">
+            <form id="mainRepairForm">
                 <div class="fg">
                     <label>👤 ชื่อ-นามสกุลของคุณ</label>
-                    <input type="text" id="cName" required placeholder="เช่น สมชาย ใจดี">
+                    <input type="text" id="formName" required placeholder="เช่น สมชาย ใจดี">
                 </div>
                 <div class="fg">
                     <label>📞 เบอร์โทรศัพท์ติดต่อ</label>
-                    <input type="tel" id="cPhone" required placeholder="เช่น 0636718151">
+                    <input type="tel" id="formPhone" required placeholder="เช่น 0807979342">
                 </div>
                 <div class="fg">
                     <label>📺 เลือกประเภทเครื่องใช้ไฟฟ้า</label>
-                    <select id="cType" required>
+                    <select id="formType" required>
                         <option value="">-- กรุณาเลือกรายการ --</option>
                         <option value="ทีวี">📺 ทีวี / โทรทัศน์ (TV)</option>
                         <option value="เครื่องซักผ้า">🧼 เครื่องซักผ้า (Washing Machine)</option>
@@ -105,53 +182,16 @@
                 </div>
                 <div class="fg">
                     <label>💥 อาการเสีย / รายละเอียดงาน</label>
-                    <textarea id="cDetail" rows="3" required placeholder="เช่น แอร์ไม่เย็น หรือ ต้องการล้างเครื่องซักผ้า"></textarea>
+                    <textarea id="formDetail" rows="3" required placeholder="ระบุอาการชำรุด เช่น เปิดไม่ติด ภาพไม่ขึ้น"></textarea>
                 </div>
                 <div class="fg">
-                    <label>📍 ที่อยู่พิมพ์อ้างอิง (ในจังหวัดสุรินทร์)</label>
-                    <input type="text" id="cAddress" required placeholder="บ้านเลขที่, หมู่, ตำบล, อำเภอ">
+                    <label>🏠 ที่อยู่จัดส่งช่าง (ในจังหวัดสุรินทร์)</label>
+                    <input type="text" id="formAddress" required placeholder="บ้านเลขที่, หมู่, ตำบล, อำเภอ">
                 </div>
                 <div class="fg">
                     <label>🗺️ ลิงก์พิกัด Google Maps (ถ้ามี)</label>
-                    <input type="text" id="cMapsUrl" placeholder="วางลิงก์แผนที่บ้านของคุณเพื่อให้นำทางได้ง่ายขึ้น">
+                    <input type="text" id="formMaps" placeholder="วางลิงก์พิกัดแผนที่บ้านของคุณ">
                 </div>
 
                 <button type="submit" class="btn-line">
-                    🟢 ส่งข้อมูลแจ้งซ่อมเข้า LINE ร้าน
-                </button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="tag">📍 รับในสุรินทร์ ทุกอำเภอ</div>
-            <div class="flex-btns">
-                <a href="tel:0636718151" class="c-btn b-ph">📞 โทร: 063-671-8151</a>
-                <a href="https://line.me" target="_blank" class="c-btn b-ln">🟢 LINE: ติดต่อช่าง</a>
-            </div>
-            <div class="copyright">&copy; 2026 T&K Electrical Appliance Repair Center. All rights reserved.</div>
-        </div>
-    </footer>
-
-    <script>
-        function checkStatus() {
-            var searchId = document.getElementById('searchId').value.trim().toUpperCase();
-            var resultBox = document.getElementById('searchResult');
-            
-            if(!searchId) {
-                alert('⚠️ กรุณากรอกรหัสงานก่อนค้นหาครับ!');
-                return;
-            }
-            
-            var jobData = localStorage.getItem(searchId);
-            if(jobData) {
-                var data = JSON.parse(jobData);
-                resultBox.style.display = "block";
-                document.getElementById('resDevice').innerText = "เครื่องใช้ไฟฟ้า: " + data.device;
-                document.getElementById('resDetail').innerText = "อาการเสีย: " + data.detail;
-                
-                var statusEl = document.getElementById('resStatus');
-                if(data.status === "wait") {
-
-                
+                    💬 ส่งข้อมูลแจ้งซ่อมเข้า LINE ร้าน
