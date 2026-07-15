@@ -3,124 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Repair Invoice System Ultimate</title>
+    <title>T&K Repair Suite & CMMS Ecosystem</title>
     <!-- โหลดฟอนต์ Prompt -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- โหลดไลบรารี html2canvas เพื่อเซฟภาพบิล -->
+    <!-- โหลดไลบรารี html2canvas สำหรับเซฟภาพบิลความละเอียดสูง -->
     <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
-        body { background-color: #030712; color: #f1f5f9; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent), radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.03), transparent); }
+        body { background-color: #030712; color: #f1f5f9; padding: 10px 10px 80px 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent), radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.03), transparent); }
         
         .w-full-md { width: 100%; max-width: 440px; }
         
-        /* แผงควบคุมระบบช่าง */
-        .glass-panel { background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)); backdrop-filter: blur(16px); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 24px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; }
+        /* ระบบจัดการสถานะแสดงผลสลับหน้าจอ (Multi-Page Component) */
+        .app-page { display: none; width: 100%; max-width: 440px; }
+        .app-page.active { display: block; }
+        
+        /* สไตล์กรอบคอนโซลแบบกระจกเรืองแสงพรีเมียม (Glassmorphism Neon Cyber) */
+        .glass-panel { background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85)); backdrop-filter: blur(16px); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden; }
         .glass-panel::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(#00E5FF, #3b82f6); }
         
-        .form-title { font-size: 18px; font-weight: 700; color: #00E5FF; margin-bottom: 16px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 500; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-title { font-size: 16px; font-weight: 700; color: #00E5FF; margin-bottom: 14px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); display: flex; align-items: center; gap: 6px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 500; color: #94a3b8; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* อินพุตและปุ่มกดแก้ไขข้อมูล */
-        .form-input { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 12px; padding: 12px; color: #fff; font-size: 14px; outline: none; }
-        .form-input:focus { border-color: #00E5FF; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
-        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 12px; }
+        /* อินพุตข้อมูลช่าง */
+        .form-input { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 10px; padding: 10px; color: #fff; font-size: 13px; outline: none; }
+        .form-input:focus { border-color: #00E5FF; box-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
+        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-cols: 1fr 1fr 1fr; gap: 8px; }
         
-        .btn-update { width: 100%; background: linear-gradient(90deg, #00E5FF, #3b82f6); color: #030712; font-weight: 700; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; margin-top: 8px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); }
-        .btn-update:active { transform: scale(0.98); }
-        .btn-export { width: 100%; background: linear-gradient(90deg, #ffd700, #f59e0b); color: #030712; font-weight: 800; padding: 16px; border: none; border-radius: 16px; cursor: pointer; font-size: 16px; box-shadow: 0 6px 25px rgba(255, 215, 0, 0.3); text-align: center; margin-top: 15px; margin-bottom: 35px; }
-        .btn-export:active { transform: scale(0.98); }
+        /* สไตล์ปุ่มตัวเลือกฟังก์ชันคัดลอกมาจากดีไซน์ Factorium ของพี่ */
+        .toggle-btn-group { display: flex; background: rgba(15, 23, 42, 0.8); padding: 4px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; }
+        .toggle-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 6px; text-align: center; }
+        .toggle-btn.active { background: #2563eb; color: #fff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4); }
         
-        /* โครงสร้างตัวบิลใบแจ้งงานดิจิทัล */
-        #invoiceContainer { background: #090d16; border: 2px solid #1e293b; border-radius: 24px; padding: 28px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
-        .bill-header { text-align: center; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 16px; margin-bottom: 16px; }
-        .bill-title { font-size: 22px; font-weight: 800; background: linear-gradient(90deg, #93c5fd, #00E5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
-        .bill-subtitle { font-size: 10px; color: #94a3b8; margin-top: 4px; }
-        .bill-badge { display: inline-block; background: rgba(0, 229, 255, 0.08); color: #00E5FF; font-size: 11px; padding: 4px 16px; border-radius: 9999px; border: 1px solid rgba(0, 229, 255, 0.2); font-weight: 600; margin-top: 10px; }
+        /* ปุ่มจัดการสถานะแจ้งเตือนส่ง LINE */
+        .status-btn-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .status-btn { padding: 6px 10px; border: 1px solid #334155; background: rgba(15, 23, 42, 0.6); color: #94a3b8; font-size: 11px; font-weight: 500; cursor: pointer; border-radius: 6px; }
+        .status-btn.active { background: #10b981; color: #fff; border-color: #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
+        
+        /* บล็อกแสดงพรีวิวพิมพ์ข้อความเพื่อแชร์ */
+        .noti-box-preview { background: rgba(0, 0, 0, 0.25); border: 1px solid #10b981; border-radius: 10px; padding: 10px; font-size: 12px; color: #10b981; margin-bottom: 12px; cursor: pointer; display: none; }
+        
+        /* ปุ่มเปิดกล้องอัปโหลดรูปหน้างาน */
+        .file-upload-btn { display: block; text-align: center; padding: 10px; background: rgba(0, 229, 255, 0.05); border: 1px dashed #00E5FF; border-radius: 10px; color: #00E5FF; font-size: 12px; font-weight: 500; cursor: pointer; margin-bottom: 12px; }
+        
+        .btn-update { width: 100%; background: linear-gradient(90deg, #00E5FF, #3b82f6); color: #030712; font-weight: 700; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; margin-top: 6px; }
+        .btn-export { width: 100%; background: linear-gradient(90deg, #ffd700, #f59e0b); color: #030712; font-weight: 800; padding: 14px; border: none; border-radius: 14px; cursor: pointer; font-size: 15px; box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3); text-align: center; margin-top: 15px; margin-bottom: 15px; }
+        
+        /* โครงสร้างตัวบิลใบแจ้งงานสไตล์โมเดิร์นวิบวับ */
+        #invoiceContainer { background: #090d16; border: 2px solid #1e293b; border-radius: 20px; padding: 24px; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .bill-header { text-align: center; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 14px; margin-bottom: 14px; }
+        .bill-title { font-size: 20px; font-weight: 800; background: linear-gradient(90deg, #93c5fd, #00E5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .bill-badge { display: inline-block; background: rgba(0, 229, 255, 0.08); color: #00E5FF; font-size: 11px; padding: 4px 14px; border-radius: 9999px; border: 1px solid rgba(0, 229, 255, 0.2); font-weight: 600; margin-top: 8px; }
         
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .text-xs { font-size: 12px; color: #64748b; }
         .text-white { color: #f8fafc; font-weight: 500; }
         
-        /* การ์ดสรุปประวัติลูกค้าและอาการเสีย */
-        .info-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(51, 65, 85, 0.4); border-radius: 16px; padding: 14px; margin-bottom: 16px; font-size: 12px; }
-        .info-line { margin-bottom: 6px; display: flex; align-items: flex-start; }
+        .info-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(51, 65, 85, 0.4); border-radius: 14px; padding: 12px; margin-bottom: 14px; font-size: 12px; }
+        .info-line { margin-bottom: 5px; display: flex; align-items: flex-start; }
         .info-line:last-child { margin-bottom: 0; }
         .info-label { color: #64748b; width: 95px; flex-shrink: 0; font-weight: 500; }
         .info-value { color: #e2e8f0; }
-        .divider { border-top: 1px dashed rgba(51, 65, 85, 0.5); margin: 10px 0; padding-top: 10px; }
+        .divider { border-top: 1px dashed rgba(51, 65, 85, 0.5); margin: 8px 0; padding-top: 8px; }
         
-        .section-title { font-size: 11px; color: #00E5FF; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; padding-left: 2px; }
+        /* จุดแสดงผลภาพหน้างานฝังลงบิลจริง */
+        #billImagePreview { display: none; width: 100%; max-height: 160px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 14px; }
+        .section-title { font-size: 11px; color: #00E5FF; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* รายการอะไหล่สไตล์โมเดิร์น 10 ช่องตามกระดาษจริง */
-        .part-list-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 8px 16px; background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 14px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 16px; font-size: 11px; color: #64748b; }
-        .part-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 2px 0; }
+        /* ระบบตารางอะไหล่ 10 แถวจากใบงานจริง */
+        .part-list-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 6px 12px; background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 12px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 14px; font-size: 11px; color: #64748b; }
+        .part-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 1px 0; }
         .part-item.active { color: #e2e8f0; }
         
-        /* กล่องยอดเงินสุทธิ */
-        .total-box { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(217, 119, 6, 0.05)); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .total-label { font-size: 13px; font-weight: 600; color: #fbbf24; }
-        .total-amount { font-size: 20px; color: #fbbf24; font-weight: 700; text-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
+        /* สรุปแจกแจงแยกประเภทค่าใช้จ่าย 3 ช่อง */
+        .cost-breakdown { font-size: 11px; border-top: 1px solid rgba(51, 65, 85, 0.4); border-bottom: 1px solid rgba(51, 65, 85, 0.4); padding: 10px 2px; margin-bottom: 14px; color: #cbd5e1; }
+        .cost-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .cost-row:last-child { margin-bottom: 0; }
         
-        /* โซนลงลายเซ็นพนักงานและลูกค้า */
-        .sign-section { display: grid; grid-template-cols: 1fr 1fr; gap: 20px; text-align: center; font-size: 11px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 16px; margin-bottom: 16px; }
-        .sign-title { color: #64748b; margin-bottom: 6px; font-weight: 500; }
-        .sign-space { height: 45px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 16px; font-weight: 500; }
+        .total-box { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(217, 119, 6, 0.05)); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .total-amount { font-size: 18px; color: #fbbf24; font-weight: 700; }
         
-        .warranty-box { font-size: 10px; color: #94a3b8; background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 20px; line-height: 1.6; }
+        .sign-section { display: grid; grid-template-cols: 1fr 1fr; gap: 16px; text-align: center; font-size: 11px; border-bottom: 1px solid rgba(51, 65, 85, 0.5); padding-bottom: 12px; margin-bottom: 12px; }
+        .sign-space { height: 40px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 15px; font-weight: 500; }
+        .warranty-box { font-size: 10px; color: #94a3b8; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 12px; border: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 16px; line-height: 1.5; }
         
         .footer-section { display: flex; justify-content: space-between; align-items: center; }
-        .footer-contact { font-size: 10px; color: #64748b; line-height: 1.6; }
-        .footer-contact-title { color: #94a3b8; font-weight: 600; margin-bottom: 3px; }
-        
-        /* สัญลักษณ์คิวอาร์โค้ด */
-        .qr-mock { width: 68px; height: 68px; border: 1px solid rgba(251, 191, 36, 0.4); padding: 6px; border-radius: 10px; background: #050811; display: flex; flex-direction: column; justify-content: space-between; }
-        .qr-row { display: flex; justify-content: space-between; height: 18px; }
-        .qr-block { width: 18px; height: 18px; background: #fbbf24; border-radius: 4px; }
-        .qr-dot { width: 8px; height: 8px; background: #fbbf24; align-self: center; margin: auto; }
-        .qr-text { font-size: 8px; color: #fbbf24; text-align: center; margin-top: 5px; font-weight: 500; }
+        .qr-mock { width: 64px; height: 64px; border: 1px solid rgba(251, 191, 36, 0.4); padding: 5px; border-radius: 8px; background: #050811; display: flex; flex-direction: column; justify-content: space-between; }
+        .qr-row { display: flex; justify-content: space-between; height: 16px; }
+        .qr-block { width: 16px; height: 16px; background: #fbbf24; border-radius: 3px; }
+        .qr-dot { width: 6px; height: 6px; background: #fbbf24; align-self: center; margin: auto; }
 
-        /* หน้าต่างป๊อปอัพพรีวิวเซฟรูปภาพในไลน์ */
-        .preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 24px; backdrop-filter: blur(8px); }
-        .preview-img { max-width: 100%; max-height: 78vh; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 229, 255, 0.25); border: 1px solid rgba(255,255,255,0.1); }
-        .preview-close { margin-top: 18px; background: #ef4444; color: white; padding: 12px 30px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; }
-    </style>
-</head>
-<body>
-
-    <!-- 1. ส่วนแผงควบคุมฟอร์มสำหรับช่าง -->
-    <div class="w-full-md glass-panel">
-        <div class="form-title">⚙️ แผงควบคุมระบบใบแจ้งซ่อม T&K</div>
-        
-        <div class="grid-2">
-            <div class="form-group">
-                <label>ชื่อลูกค้า</label>
-                <input type="text" id="inputName" value="" placeholder="กรอกชื่อลูกค้า" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>เบอร์โทรศัพท์</label>
-                <input type="text" id="inputPhone" value="" placeholder="กรอกเบอร์โทร" class="form-input">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>ที่อยู่หน้างาน</label>
-            <input type="text" id="inputAddress" value="" placeholder="ระบุสถานที่/อำเภอ" class="form-input">
-        </div>
-        <div class="grid-2">
-            <div class="form-group">
-                <label>หมวดหมู่หลัก (เช่น ไฟฟ้า/แอร์)</label>
-                <input type="text" id="inputMainCat" value="เครื่องใช้ไฟฟ้า / ระบบความเย็น" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>ประเภท / ยี่ห้อ / รุ่น</label>
-                <input type="text" id="inputBrandModel" value="" placeholder="ระบุยี่ห้อและรุ่นอุปกรณ์" class="form-input">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>ลักษณะการชำรุด / ปัญหาที่พบ</label>
-            <input type="text" id="inputSymptom" value="" placeholder="ระบุอาการเสียอย่างละเอียด" class="form-input">
-        </div>
-        <div class="form-group">
-            <label>วัสดุอุปกรณ์ / อะไหล่ที่เปลี่ยน (พิมพ์ข้อความคั่นด้วยเครื่องหมายจุลภาค , )</label>
-            
+        /* ======================================================= */
+        /* ดีไซน์หน้าจอที่ 2: ตรวจความคืบหน้า (งานคงค้าง) คัดลอกจาก Factorium */
+        /* ======================================================= */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
+        .dashboard-badge { background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+        .task-row { display: flex; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 14px; padding: 14px; margin-bottom: 10px; gap: 12px; }
