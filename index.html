@@ -4,168 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&K Repair Invoice Generator</title>
-    <!-- Tailwind CSS -->
-    <script src="https://tailwindcss.com"></script>
     <!-- Google Fonts (Prompt) -->
     <link href="https://googleapis.com" rel="stylesheet">
-    <!-- html2canvas Library สำหรับแปลง HTML เป็นรูปภาพ -->
+    <!-- html2canvas สำหรับแปลง HTML เป็นรูปภาพ -->
     <script src="https://cloudflare.com"></script>
     <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #0b0f19; }
-        .neon-glow-blue { box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
-        .neon-glow-gold { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* สไตล์หลักและระบบธีมสี Cyber Neon */
+        * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #060b13; color: #e2e8f0; padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .w-full-md { width: 100%; max-width: 420px; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .neon-blue { border-color: rgba(0, 229, 255, 0.3); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); }
+        
+        /* ฟอร์มและอินพุต */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+        .form-input { width: 100%; bg-color: #0f172a; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; color: #fff; font-size: 14px; outline: none; }
+        .form-input:focus { border-color: #00E5FF; }
+        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; }
+        
+        /* ปุ่มเรืองแสง */
+        .btn-update { width: 100%; background: linear-gradient(90deg, #00E5FF, #2563eb); color: #000; font-weight: 700; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px; transition: transform 0.1s; }
+        .btn-update:active { transform: scale(0.98); }
+        .btn-export { width: 100%; background: linear-gradient(90deg, #ffd700, #f59e0b); color: #000; font-weight: 800; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 15px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.25); text-align: center; }
+        .btn-export:active { transform: scale(0.98); }
+        
+        /* ส่วนประกอบภายในบิล */
+        #invoiceContainer { background: #0b0f19; border: 2px solid #1e293b; border-radius: 16px; padding: 24px; position: relative; }
+        .bill-header { text-align: center; border-b: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid #1e293b; }
+        .bill-title { font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #60a5fa, #00E5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .bill-subtitle { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin-top: 2px; }
+        .bill-badge { display: inline-block; background: rgba(0, 229, 255, 0.1); color: #00E5FF; font-size: 11px; padding: 3px 12px; border-radius: 9999px; border: 1px solid rgba(0, 229, 255, 0.2); font-weight: 600; margin-top: 8px; }
+        
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .text-xs { font-size: 12px; color: #94a3b8; }
+        .text-white { color: #f8fafc; }
+        
+        .info-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-size: 12px; }
+        .info-line { margin-bottom: 4px; }
+        .info-label { color: #94a3b8; }
+        .divider { border-top: 1px dashed #1e293b; margin: 8px 0; padding-top: 8px; }
+        
+        .table-title { font-size: 12px; color: #94a3b8; font-weight: 500; margin-bottom: 8px; padding: 0 4px; }
+        .table-body { border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b; padding: 12px 4px; margin-bottom: 16px; font-size: 12px; }
+        .table-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .table-row:last-child { margin-bottom: 0; }
+        
+        .total-box { background: rgba(255, 215, 0, 0.03); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 0 15px rgba(255, 215, 0, 0.05); }
+        .total-label { font-size: 13px; font-weight: 600; color: #fbbf24; }
+        .total-amount { font-size: 20px; font-bold: 700; color: #fbbf24; font-weight: 700; }
+        
+        .sign-section { display: grid; grid-template-cols: 1fr 1fr; gap: 16px; text-align: center; font-size: 11px; border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 16px; }
+        .sign-title { color: #94a3b8; margin-bottom: 4px; }
+        .sign-space { height: 40px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 15px; }
+        .sign-sub { color: #64748b; }
+        
+        .warranty-box { font-size: 10px; color: #94a3b8; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; border: 1px solid #1e293b; margin-bottom: 16px; line-height: 1.5; }
+        .warranty-title { color: #00E5FF; font-weight: 600; margin-bottom: 2px; }
+        
+        .footer-section { display: flex; justify-content: space-between; align-items: center; }
+        .footer-contact { font-size: 10px; color: #94a3b8; line-height: 1.5; }
+        .footer-contact-title { color: #cbd5e1; font-weight: 500; margin-bottom: 2px; }
+        
+        /* สัญลักษณ์ QR Code จำลองจากเวกเตอร์ SVG (หมดปัญหา CORS โหลดไม่ติด) */
+        .qr-mock { width: 65px; height: 65px; border: 1px solid rgba(255, 215, 0, 0.3); padding: 4px; border-radius: 8px; background: #0b0f19; display: flex; flex-direction: column; justify-content: space-between; }
+        .qr-row { display: flex; justify-content: space-between; height: 16px; }
+        .qr-block { width: 16px; height: 16px; background: #ffd700; border-radius: 2px; }
+        .qr-dot { width: 6px; height: 6px; background: #ffd700; align-self: center; margin: auto; }
+        .qr-text { font-size: 8px; color: #ffd700; text-align: center; margin-top: 4px; }
     </style>
 </head>
-<body class="text-gray-200 min-h-screen p-4 flex flex-col items-center">
+<body>
 
-    <!-- ส่วนที่ 1: ฟอร์มกรอกข้อมูลสำหรับช่าง -->
-    <div class="w-full max-w-md glass-panel rounded-2xl p-6 mb-6 neon-glow-blue">
-        <h2 class="text-xl font-bold mb-4 text-[#00E5FF] flex items-center gap-2">
-            🛠️ ระบบจัดการข้อมูลบิล T&K
-        </h2>
+    <!-- ส่วนกรอกข้อมูล -->
+    <div class="w-full-md glass-panel neon-blue">
+        <h2 style="font-size: 16px; font-weight: 700; color: #00E5FF; margin-bottom: 12px;">🛠️ ระบบจัดการข้อมูลบิล T&K</h2>
         
-        <div class="space-y-3 text-sm">
-            <div>
-                <label class="block text-gray-400 mb-1">ชื่อลูกค้า</label>
-                <input type="text" id="inputName" value="คุณสมชาย ดีใจ" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-[#00E5FF]">
-            </div>
-            <div>
-                <label class="block text-gray-400 mb-1">เบอร์โทรศัพท์</label>
-                <input type="text" id="inputPhone" value="081-234-5678" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-[#00E5FF]">
-            </div>
-            <div>
-                <label class="block text-gray-400 mb-1">อุปกรณ์ / อาการเสีย</label>
-                <input type="text" id="inputDevice" value="สมาร์ททีวี OLED 55 นิ้ว (อาการ: บอร์ดจ่ายไฟชำรุด)" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-[#00E5FF]">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <label class="block text-gray-400 mb-1">ค่าอะไหล่ (บาท)</label>
-                    <input type="number" id="inputPartCost" value="500" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-[#00E5FF]">
-                </div>
-                <div>
-                    <label class="block text-gray-400 mb-1">ค่าบริการช่าง (บาท)</label>
-                    <input type="number" id="inputServiceCost" value="800" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-[#00E5FF]">
-                </div>
-            </div>
-            <button onclick="updateInvoice()" class="w-full mt-4 bg-gradient-to-r from-[#00E5FF] to-blue-600 text-black font-bold py-2 rounded-lg hover:opacity-90 transition">
-                🔄 อัปเดตข้อมูลลงบิล
-            </button>
+        <div class="form-group">
+            <label>ชื่อลูกค้า</label>
+            <input type="text" id="inputName" value="คุณสมชาย ดีใจ" class="form-input">
         </div>
+        <div class="form-group">
+            <label>เบอร์โทรศัพท์</label>
+            <input type="text" id="inputPhone" value="081-234-5678" class="form-input">
+        </div>
+        <div class="form-group">
+            <label>อุปกรณ์ / อาการเสีย</label>
+            <input type="text" id="inputDevice" value="สมาร์ททีวี OLED 55 นิ้ว (อาการ: บอร์ดจ่ายไฟชำรุด)" class="form-input">
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>ค่าอะไหล่ (บาท)</label>
+                <input type="number" id="inputPartCost" value="500" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>ค่าบริการช่าง (บาท)</label>
+                <input type="number" id="inputServiceCost" value="800" class="form-input">
+            </div>
+        </div>
+        <button onclick="updateInvoice()" class="btn-update">🔄 อัปเดตข้อมูลลงบิล</button>
     </div>
 
-    <!-- ส่วนที่ 2: หน้าตาบิลเรืองแสง (จะโดนเซฟเป็นรูปภาพ) -->
-    <div id="invoiceContainer" class="w-full max-w-md bg-[#0e1424] border-2 border-gray-800 rounded-2xl p-6 relative overflow-hidden mb-6">
-        <!-- เอฟเฟกต์เส้นแสง Cyber ฉากหลัง -->
-        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-32 h-32 bg-yellow-500/5 rounded-full blur-3xl"></div>
+    <!-- ส่วนแสดงผลภาพบิลแจ้งซ่อม -->
+    <div id="invoiceContainer" class="w-full-md">
+        <div class="bill-header">
+            <h1 class="bill-title">⚡ T&K ELECTRICAL</h1>
+            <p class="bill-subtitle">Appliance Repair Center</p>
+            <div class="bill-badge">ใบเสร็จรับเงิน / ใบแจ้งซ่อมดิจิทัล</div>
+        </div>
 
-        <!-- หัวบิล -->
-        <div class="text-center border-b border-gray-800 pb-4 mb-4">
-            <h1 class="text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#00E5FF]">
-                ⚡ T&K ELECTRICAL
-            </h1>
-            <p class="text-xs text-gray-400 uppercase tracking-widest mt-0.5">Appliance Repair Center</p>
-            <div class="mt-2 text-[10px] bg-blue-500/10 text-[#00E5FF] inline-block px-3 py-1 rounded-full border border-blue-500/20 font-semibold tracking-wide">
-                ใบเสร็จรับเงิน / ใบแจ้งซ่อมดิจิทัล
+        <div class="flex-between text-xs" style="margin-bottom: 12px; padding: 0 4px;">
+            <p>เลขที่: <span class="text-white" id="billNo">TK-20260715-01</span></p>
+            <p>วันที่: <span class="text-white">15 ก.ค. 2026</span></p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-line"><span class="info-label">👤 ลูกค้า:</span> <span id="lblName" class="text-white" style="font-weight:500;">คุณสมชาย ดีใจ</span></div>
+            <div class="info-line"><span class="info-label">📞 โทร:</span> <span id="lblPhone" class="text-white">081-234-5678</span></div>
+            <div class="divider"></div>
+            <div class="info-line"><span class="info-label">🛠️ งานซ่อม:</span> <span id="lblDevice" class="text-white">สมาร์ททีวี OLED 55 นิ้ว (อาการ: บอร์ดจ่ายไฟชำรุด)</span></div>
+        </div>
+
+        <div class="table-title">รายละเอียดค่าบริการ</div>
+        <div class="table-body">
+            <div class="table-row">
+                <span style="color: #cbd5e1;">1. อะไหล่ / ชิ้นส่วนงานระบบ</span>
+                <span class="text-white" id="lblPartCost">500.00 บาท</span>
+            </div>
+            <div class="table-row">
+                <span style="color: #cbd5e1;">2. ค่าบริการช่างชำนาญการ</span>
+                <span class="text-white" id="lblServiceCost">800.00 บาท</span>
             </div>
         </div>
 
-        <!-- เลขที่บิล / วันที่ -->
-        <div class="flex justify-between text-xs text-gray-400 mb-4 px-1">
-            <p>เลขที่: <span class="text-gray-200" id="billNo">TK-20260715-01</span></p>
-            <p>วันที่: <span class="text-gray-200">15 ก.ค. 2026</span></p>
+        <div class="total-box">
+            <span class="total-label">💰 ยอดรวมสุทธิ (NET TOTAL)</span>
+            <span class="total-amount" id="lblTotal">1,300.00 บาท</span>
         </div>
 
-        <!-- ข้อมูลลูกค้า -->
-        <div class="glass-panel rounded-xl p-3 mb-4 text-xs space-y-1">
-            <p><span class="text-gray-400">👤 ลูกค้า:</span> <span id="lblName" class="text-gray-200 font-medium">คุณสมชาย ดีใจ</span></p>
-            <p><span class="text-gray-400">📞 โทร:</span> <span id="lblPhone" class="text-gray-200">081-234-5678</span></p>
-            <p class="border-t border-gray-800/50 mt-1 pt-1"><span class="text-gray-400">🛠️ งานซ่อม:</span> <span id="lblDevice" class="text-gray-200">สมาร์ททีวี OLED 55 นิ้ว (อาการ: บอร์ดจ่ายไฟชำรุด)</span></p>
-        </div>
-
-        <!-- ตารางค่าบริการ -->
-        <div class="text-xs mb-4">
-            <div class="flex justify-between text-gray-400 font-medium mb-2 px-1">
-                <span>รายละเอียด</span>
-                <span>จำนวนเงิน</span>
-            </div>
-            <div class="space-y-2 border-t border-b border-gray-800 py-3 px-1">
-                <div class="flex justify-between">
-                    <span class="text-gray-300">1. อะไหล่ / ชิ้นส่วนงานระบบ</span>
-                    <span class="text-gray-200" id="lblPartCost">500.00 บาท</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-300">2. ค่าบริการช่างชำนาญการ</span>
-                    <span class="text-gray-200" id="lblServiceCost">800.00 บาท</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ยอดรวมสุทธิ -->
-        <div class="glass-panel neon-glow-gold border border-yellow-500/30 rounded-xl p-4 flex justify-between items-center mb-5">
-            <span class="text-sm font-semibold text-yellow-400 tracking-wide">💰 ยอดรวมสุทธิ (NET TOTAL)</span>
-            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500" id="lblTotal">1,300.00 บาท</span>
-        </div>
-
-        <!-- ลายเซ็นดิจิทัลจำลอง -->
-        <div class="grid grid-cols-2 gap-4 border-b border-gray-800 pb-4 mb-4 text-center text-[11px]">
+        <div class="sign-section">
             <div>
-                <p class="text-gray-400 mb-1">ลงชื่อช่างผู้ซ่อม</p>
-                <div class="h-10 flex items-center justify-center font-serif text-blue-400 italic text-base">T&K Repair</div>
-                <p class="text-gray-500">( ช่างเทคนิคประจำศูนย์ )</p>
+                <p class="sign-title">ลงชื่อช่างผู้ซ่อม</p>
+                <div class="sign-space" style="color: #60a5fa;">T&K Repair</div>
+                <p class="sign-sub">( ช่างเทคนิคประจำศูนย์ )</p>
             </div>
             <div>
-                <p class="text-gray-400 mb-1">ลงชื่อผู้รับบริการ</p>
-                <div class="h-10 flex items-center justify-center font-serif text-yellow-400 italic text-base">Somch_D</div>
-                <p class="text-gray-500">( ลายเซ็นดิจิทัล )</p>
-            </div>
-        </div>
-
-        <!-- เงื่อนไขการรับประกัน -->
-        <div class="text-[10px] text-gray-400 space-y-1 bg-black/20 p-3 rounded-lg border border-gray-800/50 mb-4">
-            <p class="text-[#00E5FF] font-semibold">🛡️ เงื่อนไขการรับประกันงานซ่อม (E-Warranty)</p>
-            <p>• รับประกันเฉพาะอาการเดิมและอะไหล่ชิ้นเดิมเป็นเวลา 90 วัน</p>
-            <p>• ประกันสิ้นสุดทันทีหากเกิดจากไฟตก ไฟกระชาก หรือมีการแกะซ่อมเอง</p>
-        </div>
-
-        <!-- ท้ายบิลและการติดต่อ -->
-        <div class="flex items-center justify-between pt-1">
-            <div class="text-[10px] text-gray-400 space-y-0.5">
-                <p class="text-gray-300 font-medium">🌐 ช่องทางติดต่อร้าน T&K</p>
-                <p>📞 โทรด่วน: 063-671-8151</p>
-                <p>🔵 FB: T&K Electrical Appliance Repair Center</p>
-            </div>
-            <!-- จำลอง QR Code ไปยัง LINE OA จริงของร้าน -->
-            <div class="text-center">
-                <img src="https://qrserver.com" alt="Line QR" class="w-16 h-16 border border-yellow-500/30 p-0.5 rounded-lg">
-                <p class="text-[8px] text-yellow-400 mt-1">สแกนแจ้งเคลม / จ่ายเงิน</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ปุ่มแอคชั่นหลัก -->
-    <div class="w-full max-w-md">
-        <button onclick="exportInvoice()" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-extrabold py-3 rounded-xl shadow-lg transition active:scale-95 text-center flex items-center justify-center gap-2">
-            📸 ออกบิลและบันทึกเป็นไฟล์รูปภาพ
-        </button>
-    </div>
-
-    <!-- JavaScript ควบคุมการทำงาน -->
-    <script>
-        // ฟังก์ชันสุ่มเลขที่บิลให้ดูสมจริง
-        document.getElementById('billNo').innerText = 'TK-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(100 + Math.random() * 900);
-
-        // ฟังก์ชันอัปเดตข้อมูลจากฟอร์มลงบิลสดๆ
-        function updateInvoice() {
-            const name = document.getElementById('inputName').value;
-            const phone = document.getElementById('inputPhone').value;
-            const device = document.getElementById('inputDevice').value;
-            const partCost = parseFloat(document.getElementById('inputPartCost').value) || 0;
-            const serviceCost = parseFloat(document.getElementById('inputServiceCost').value) || 0;
-            const total = partCost + serviceCost;
-
-            document.getElementById('lblName').innerText = name;
-            document.getElementById('lblPhone').innerText = phone;
-            document.getElementById('lblDevice').innerText = device;
-      
+                <p class="sign-title">ลงชื่อผู้รับบริการ</p>
+                
