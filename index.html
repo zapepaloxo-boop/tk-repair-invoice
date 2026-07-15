@@ -7,35 +7,30 @@
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK เพื่อระบบคลาวด์ออนไลน์ใช้งานได้จริง -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Prompt', sans-serif; background-color: #030712; color: #f1f5f9; line-height: 1.6; padding: 20px 12px; }
         .container { max-width: 1000px; margin: 0 auto; width: 100%; }
         
-        /* ส่วนหัวสไตล์ SolarCRM */
+        /* Header สไตล์ Premium */
         header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #1f2937; margin-bottom: 25px; }
         .logo-section { display: flex; align-items: center; gap: 12px; }
         .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
         .logo-title h1 { font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
         .logo-title p { font-size: 11px; color: #fbbf24; font-weight: 500; }
         
-        /* ปุ่มสลับหน้าจอ (Tab Navigation) */
+        /* ปุ่มสลับแท็บแยกหน้า */
         .tab-bar { display: flex; gap: 10px; background: #111827; padding: 6px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #1f2937; }
-        .tab-btn { flex: 1; background: transparent; border: none; color: #9ca3af; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .tab-btn { flex: 1; background: transparent; border: none; color: #9ca3af; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .tab-btn.active { background: #1f2937; color: #ffffff; border: 1px solid rgba(251, 191, 36, 0.3); }
         
-        /* สไตล์การ์ดภาพรวมแดชบอร์ดสรุปตัวเลข (Dashboard Stats) */
+        /* แดชบอร์ดสรุปตัวเลขความคืบหน้าภาพรวมร้าน */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
         .stat-card { background: #111827; padding: 15px; border-radius: 16px; border: 1px solid #1f2937; text-align: left; }
         .stat-card p { font-size: 11px; color: #9ca3af; }
         .stat-card h3 { font-size: 20px; color: #ffffff; font-weight: 700; margin-top: 2px; }
         
-        /* สไตล์กล่องฟังก์ชันพรีเมียม */
+        /* การจัดวางหน้าโครงสร้างฟังก์ชัน */
         .panel { display: none; }
         .panel.active { display: block; }
         .main-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -51,26 +46,27 @@
         input, select, textarea { width: 100%; background: #030712; border: 1px solid #1f2937; border-radius: 10px; padding: 11px 14px; color: #ffffff; font-size: 13px; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #fbbf24; }
         
-        .btn-gold { width: 100%; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #1e293b; border: none; border-radius: 10px; padding: 13px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-gold { width: 100%; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #1e293b; border: none; border-radius: 10px; padding: 13px; font-size: 13px; font-weight: bold; cursor: pointer; }
         .btn-green { width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 10px; padding: 13px; font-size: 13px; font-weight: bold; cursor: pointer; }
         
-        /* ใบแสดงบิลและระบบแชท */
+        /* ส่วนแสดงผลใบเสนอราคาบิล */
         .output-box { display: none; background: #030712; padding: 16px; border-radius: 12px; border: 1px solid #1f2937; margin-top: 15px; font-size: 13px; }
+        .bill-header { font-weight: bold; color: #fbbf24; border-bottom: 1px solid #1f2937; padding-bottom: 5px; margin-bottom: 8px; font-size: 14px; }
         .bill-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-        .status-tag { display: inline-block; padding: 3px 10px; border-radius: 50px; font-weight: bold; font-size: 11px; color: white; }
+        .status-tag { display: inline-block; padding: 4px 12px; border-radius: 50px; font-weight: bold; font-size: 11px; color: white; }
         
+        /* ส่วนกล่องแชทโต้ตอบโหมดพรีเมียม */
         .chat-container { display: flex; flex-direction: column; margin-top: 15px; border-top: 1px solid #1f2937; padding-top: 12px; }
         .chat-box { height: 140px; overflow-y: auto; background: #030712; border: 1px solid #1f2937; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
         .msg-line { max-width: 85%; padding: 6px 10px; border-radius: 8px; font-size: 12px; word-break: break-all; }
-        .msg-admin { background: rgba(251, 191, 36, 0.15); color: #fbbf24; align-self: flex-start; }
-        .msg-client { background: rgba(56, 189, 248, 0.15); color: #38bdf8; align-self: flex-end; }
+        .msg-admin { background: rgba(251, 191, 36, 0.15); color: #fbbf24; align-self: flex-start; border-left: 3px solid #fbbf24; }
+        .msg-client { background: rgba(56, 189, 248, 0.15); color: #38bdf8; align-self: flex-end; border-right: 3px solid #38bdf8; }
         
-        /* หลังบ้านช่าง แอดมิน */
+        /* ส่วนแสดงรายการงานฝั่งหลังบ้านแอดมิน */
         .log-list { background: #030712; padding: 10px; border-radius: 12px; border: 1px solid #1f2937; margin-top: 12px; max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-        .log-item { background: #111827; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981; font-size: 12px; text-align: left; cursor: pointer; }
+        .log-item { background: #111827; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981; font-size: 12px; text-align: left; cursor: pointer; transition: background 0.2s; }
         .log-item:hover { background: #1f2937; }
         
-        /* ส่วนท้าย */
         .info-card { background: #111827; border: 1px solid #1f2937; padding: 20px; border-radius: 16px; margin-top: 30px; text-align: left; font-size: 12px; }
         .footer-btns { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         .footer-link { flex: 1; min-width: 130px; text-align: center; padding: 11px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; }
@@ -79,7 +75,7 @@
 <body>
 
     <div class="container">
-        <!-- แถบด้านบนสไตล์แดชบอร์ดแอป SolarCRM -->
+        <!-- แถบเมนูหัวเว็บแดชบอร์ดตามสั่ง -->
         <header>
             <div class="logo-section">
                 <div class="logo-icon">⚡</div>
@@ -91,31 +87,32 @@
             <div style="font-size: 11px; color: #9ca3af; background: #111827; padding: 6px 12px; border-radius: 8px; border: 1px solid #1f2937;">📍 จ.สุรินทร์</div>
         </header>
 
-        <!-- แถบเมนูปุ่มกดสลับแท็บแยกหน้าชัดเจน -->
+        <!-- ระบบแท็บสลับหน้า ป้องกันข้อมูลลูกค้าปะปนกัน -->
         <div class="tab-bar">
             <button class="tab-btn active" id="btnTabClient" onclick="switchTab('client')">📱 หน้าบริการสำหรับลูกค้า</button>
             <button class="tab-btn" id="btnTabAdmin" onclick="switchTab('admin')">⚙️ แผงควบคุมระบบหลังบ้านช่าง</button>
         </div>
 
-        <!-- แดชบอร์ดสรุปตัวเลขความคืบหน้ารวมทั้งหมดของร้านสไตล์ SolarCRM -->
+        <!-- แดชบอร์ดวิเคราะห์สถิติตัวเลขภาพรวมแบบในภาพตัวอย่าง SolarCRM -->
         <div class="stats-grid">
             <div class="stat-card"><p>📦 คิวงานแจ้งซ่อมทั้งหมด</p><h3 id="statTotal">0</h3></div>
-            <div class="stat-card"><p>🔧 กำลังดำเนินการซ่อม</p><h3 id="statProgress" style="color: #2563eb;">0</h3></div>
+            <div class="stat-card"><p>🔧 กำลังดำเนินการซ่อม</p><h3 id="statProgress" style="color: #38bdf8;">0</h3></div>
             <div class="stat-card"><p>✅ ซ่อมเสร็จสิ้นปิดงาน</p><h3 id="statSuccess" style="color: #10b981;">0</h3></div>
         </div>
 
-        <!-- 📱 แท็บที่ 1: หน้าต่างจัดการฝั่งลูกค้าทั่วไป -->
+        <!-- 📱 แท็บหน้าจอหลักของลูกค้า -->
         <div id="panelClient" class="panel active">
             <div class="main-layout">
-                <!-- ส่วนที่ 1.1: ล็อกอินติดตามสถานะของลูกค้า -->
+                <!-- ส่วนกล่องล็อกอินเช็คความคืบหน้าและใบเสนอราคาวางบิล -->
                 <div class="premium-card" style="border-color: rgba(251, 191, 36, 0.3);">
                     <h2>🔍 ติดตามความคืบหน้า & <span>ตรวจสอบบิล</span></h2>
-                    <p>ป้อนเบอร์โทรศัพท์และรหัสผ่านที่คุณตั้งไว้เพื่อเช็คคิวงานและคุยกับช่าง</p>
+                    <p>ป้อนเบอร์โทรศัพท์และรหัสผ่านที่คุณตั้งไว้เพื่อเช็คคิวงานและแชทโต้ตอบกับช่าง</p>
                     <div class="fg"><label>📞 เบอร์โทรศัพท์เคลื่อนที่ (ID)</label><input type="tel" id="loginPhone" placeholder="กรอกเบอร์โทรของคุณ"></div>
                     <div class="fg"><label>🔑 รหัสผ่านเข้าใช้งาน (Password)</label><input type="password" id="loginPass" placeholder="กรอกรหัสผ่าน"></div>
                     <button type="button" class="btn-gold" onclick="loginTrack()">🔓 เข้าสู่ระบบตรวจสอบ</button>
                     
                     <div id="trackResult" class="output-box">
+                        <div class="bill-header">🧾 ข้อมูลใบวางบิล & ตั๋วงานซ่อม</div>
                         <div class="bill-row"><span>📌 สถานะดำเนินการ:</span><div><span id="vStatus" class="status-tag">รอดำเนินการ</span></div></div>
                         <div class="bill-row"><span>📅 วันที่รับเครื่องเข้าคลัง:</span><span id="vInDate" style="color:#fbbf24;">-</span></div>
                         <div class="bill-row"><span>📺 ประเภทเครื่อง:</span><span id="vType">-</span></div>
@@ -124,7 +121,6 @@
                             <span>💵 ยอดวางบิลประเมินราคา:</span><span id="vPrice" style="color:#10b981;">0.00 บาท</span>
                         </div>
                         
-                        <!-- ช่องแชทเรียบลวดลายพรีเมียมภายในบิล -->
+                        <!-- ช่องแชทคุยออนไลน์ระหว่างลูกค้ากับช่างแอดมิน -->
                         <div class="chat-container">
-                            <div class="bill-row" style="font-weight: bold; color: #fbbf24; margin-bottom: 5px;">💬 แชทติดต่อแอดมินช่าง:</div>
-                            <div id="clientChatBox" class="chat-box"></div>
+                            <div class="bill-header" style="border:none; margin:0; padding:0; color:#38bdf8;">💬 ห้องแชทพูดคุยโต้ตอบกับช่าง:</div>
