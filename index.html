@@ -4,160 +4,322 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&K Electrical Appliance Repair Center</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
+    <!-- ใช้ Font Awesome สำหรับไอคอน (ถ้าเน็ตไม่โหลดจะแสดงเป็นข้อความปกติ ไม่ทำให้หน้าเว็บพัง) -->
     <link rel="stylesheet" href="https://cloudflare.com">
-    <!-- Google Fonts (Prompt) -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* CSS ดั้งเดิม โหลดทันที ไม่ต้องง้อ CDN */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: 'Prompt', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #0b1329;
+            color: #f1f5f9;
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+        .header-card {
+            background-color: #1c2541;
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid #38bdf8;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #38bdf8;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            color: #ffffff;
+            font-size: 32px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: #38bdf8;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .tagline {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            color: #38bdf8;
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        .service-card {
+            background-color: #1c2541;
+            padding: 25px 15px;
+            border-radius: 15px;
+            border: 1px solid #1e293b;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .service-card i {
+            font-size: 35px;
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+        .service-card h3 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        .service-card p {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .brand-list {
+            font-size: 11px;
+            color: #7dd3fc;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* Booking Form */
+        .form-section {
+            max-width: 550px;
+            margin: 0 auto 50px auto;
+            background-color: #1c2541;
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .form-section h2 {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+        .form-section .form-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 480px) {
+            .form-group-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        input, select, textarea {
+            width: 100%;
+            background-color: #0b1329;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #38bdf8;
+        }
+        button.btn-submit {
+            width: 100%;
+            background-color: #38bdf8;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button.btn-submit:hover {
+            background-color: #0ea5e9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 10px;
+            border-top: 1px solid #1e293b;
+            background-color: #0b1329;
+        }
+        .location-tag {
+            display: inline-block;
+            background-color: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 180px;
+        }
+        .btn-phone {
+            background-color: #1c2541;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .btn-fb {
+            background-color: #1877f2;
+            color: #ffffff;
+        }
+        .copyright {
+            font-size: 11px;
+            color: #475569;
+            margin-top: 25px;
         }
     </style>
 </head>
-<body class="text-gray-100 min-h-screen flex flex-col justify-between">
+<body>
 
     <!-- Header Section -->
-    <header class="container mx-auto text-center pt-10 px-4">
-        <div class="inline-block p-6 sm:p-8 bg-[#1c2541] rounded-2xl border border-sky-500/30 max-w-2xl w-full shadow-xl">
-            <div class="w-16 h-16 mx-auto mb-4 bg-sky-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <i class="fa-solid fa-plug-circle-bolt text-2xl text-white"></i>
+    <header class="container">
+        <div class="header-card">
+            <div class="logo-icon">
+                <i class="fa-solid fa-plug-circle-bolt"></i>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-wide text-white">
-                T&K ELECTRICAL APPLIANCE
-            </h1>
-            <p class="text-sky-400 font-medium tracking-widest mt-1 text-xs sm:text-sm uppercase">Repair Center & One-Stop Service</p>
-            <p class="text-xs text-gray-400 mt-2">ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</p>
+            <h1>T&K ELECTRICAL APPLIANCE</h1>
+            <div class="subtitle">Repair Center & One-Stop Service</div>
+            <div class="tagline">ศูนย์ซ่อมเครื่องใช้ไฟฟ้าช่างคุณภาพ ดูแลบ้านครบวงจร</div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-10 max-w-6xl space-y-12">
+    <main class="container">
         
         <!-- Services Section -->
         <section>
-            <h2 class="text-lg sm:text-xl font-semibold text-center text-sky-400 mb-6 tracking-wide">
-                <i class="fa-solid fa-screwdriver-wrench mr-2"></i> หมวดหมู่บริการของเรา
-            </h2>
+            <div class="section-title">
+                <i class="fa-solid fa-screwdriver-wrench"></i> หมวดหมู่บริการของเรา
+            </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="services-grid">
                 <!-- TV -->
-                <div class="bg-[#1c2541] p-5 rounded-xl border border-gray-800 text-center flex flex-col justify-between">
+                <div class="service-card">
                     <div>
-                        <i class="fa-solid fa-tv text-3xl text-sky-400 mb-3"></i>
-                        <h3 class="font-semibold text-white text-base mb-1">TV REPAIR</h3>
-                        <p class="text-xs text-gray-400">ซ่อมทีวี ซ่อมโทรทัศน์ ช่างซ่อมทีวี รับซ่อมทีวีถึงบ้าน</p>
+                        <i class="fa-solid fa-tv"></i>
+                        <h3>TV REPAIR</h3>
+                        <p>ซ่อมทีวี ซ่อมโทรทัศน์ ช่างซ่อมทีวี รับซ่อมทีวีถึงบ้าน</p>
                     </div>
-                    <div class="text-[10px] text-sky-300 mt-4 pt-2 border-t border-gray-800">SAMSUNG, LG, SONY, TOSHIBA</div>
+                    <div class="brand-list">SAMSUNG, LG, SONY, TOSHIBA</div>
                 </div>
 
                 <!-- WASHING MACHINE -->
-                <div class="bg-[#1c2541] p-5 rounded-xl border border-gray-800 text-center flex flex-col justify-between">
+                <div class="service-card">
                     <div>
-                        <i class="fa-solid fa-soap text-3xl text-sky-400 mb-3"></i>
-                        <h3 class="font-semibold text-white text-base mb-1">WASHING MACHINE</h3>
-                        <p class="text-xs text-gray-400">ช่างซ่อมเครื่องซักผ้า บริการล้างถัง ซ่อมเครื่องฝาหน้าและฝาบน</p>
+                        <i class="fa-solid fa-soap"></i>
+                        <h3>WASHING MACHINE</h3>
+                        <p>ช่างซ่อมเครื่องซักผ้า บริการล้างถัง ซ่อมเครื่องฝาหน้าและฝาบน</p>
                     </div>
-                    <div class="text-[10px] text-sky-300 mt-4 pt-2 border-t border-gray-800">(LG, SAMSUNG) ทุกยี่ห้อ</div>
+                    <div class="brand-list">(LG, SAMSUNG) ทุกยี่ห้อ</div>
                 </div>
 
                 <!-- FRIDGE -->
-                <div class="bg-[#1c2541] p-5 rounded-xl border border-gray-800 text-center flex flex-col justify-between">
+                <div class="service-card">
                     <div>
-                        <i class="fa-solid fa-snowflake text-3xl text-sky-400 mb-3"></i>
-                        <h3 class="font-semibold text-white text-base mb-1">FRIDGE REPAIR</h3>
-                        <p class="text-xs text-gray-400">ซ่อมตู้เย็น รับซ่อมถึงบ้าน บริการล้างตรวจเช็คสภาพตู้เย็น</p>
+                        <i class="fa-solid fa-snowflake"></i>
+                        <h3>FRIDGE REPAIR</h3>
+                        <p>ซ่อมตู้เย็น รับซ่อมถึงบ้าน บริการล้างตรวจเช็คสภาพตู้เย็น</p>
                     </div>
-                    <div class="text-[10px] text-sky-300 mt-4 pt-2 border-t border-gray-800">SAMSUNG, PANASONIC</div>
+                    <div class="brand-list">SAMSUNG, PANASONIC</div>
                 </div>
 
                 <!-- A/C -->
-                <div class="bg-[#1c2541] p-5 rounded-xl border border-gray-800 text-center flex flex-col justify-between">
+                <div class="service-card">
                     <div>
-                        <i class="fa-solid fa-wind text-3xl text-sky-400 mb-3"></i>
-                        <h3 class="font-semibold text-white text-base mb-1">A/C REPAIR</h3>
-                        <p class="text-xs text-gray-400">ซ่อมแอร์บ้าน ติดตั้ง ช่างล้างแอร์ด่วน เปลี่ยนอะไหล่ ย้ายแอร์</p>
+                        <i class="fa-solid fa-wind"></i>
+                        <h3>A/C REPAIR</h3>
+                        <p>ซ่อมแอร์บ้าน ติดตั้ง ช่างล้างแอร์ด่วน เปลี่ยนอะไหล่ ย้ายแอร์</p>
                     </div>
-                    <div class="text-[10px] text-sky-300 mt-4 pt-2 border-t border-gray-800">ล้างถอดถาด / ล้างด่วน</div>
+                    <div class="brand-list">ล้างถอดถาด / ล้างด่วน</div>
                 </div>
 
                 <!-- FAN -->
-                <div class="bg-[#1c2541] p-5 rounded-xl border border-gray-800 text-center flex flex-col justify-between">
+                <div class="service-card">
                     <div>
-                        <i class="fa-solid fa-fan text-3xl text-sky-400 mb-3"></i>
-                        <h3 class="font-semibold text-white text-base mb-1">FAN REPAIR</h3>
-                        <p class="text-xs text-gray-400">ซ่อมพัดลม เปลี่ยนอะไหล่ พัดลมตั้งโต๊ะและพัดลมติดเพดาน</p>
+                        <i class="fa-solid fa-fan"></i>
+                        <h3>FAN REPAIR</h3>
+                        <p>ซ่อมพัดลม เปลี่ยนอะไหล่ พัดลมตั้งโต๊ะและพัดลมติดเพดาน</p>
                     </div>
-                    <div class="text-[10px] text-sky-300 mt-4 pt-2 border-t border-gray-800">ทุกรุ่น ทุกอาการเสีย</div>
+                    <div class="brand-list">ทุกรุ่น ทุกอาการเสีย</div>
                 </div>
             </div>
         </section>
 
         <!-- Booking Form Section -->
-        <section class="max-w-xl mx-auto">
-            <div class="bg-[#1c2541] rounded-2xl p-6 sm:p-8 border border-gray-800 shadow-xl">
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold text-white flex items-center gap-2">
-                        <i class="fa-regular fa-calendar-check text-sky-400"></i> นัดหมายแจ้งซ่อมออนไลน์
-                    </h2>
-                    <p class="text-xs text-gray-400 mt-1">กรอกข้อมูลรายละเอียดเพื่อให้ช่างติดต่อกลับครับ</p>
-                </div>
+        <section class="form-section">
+            <h2><i class="fa-regular fa-calendar-check"></i> นัดหมายแจ้งซ่อมออนไลน์</h2>
+            <div class="form-desc">กรอกข้อมูลรายละเอียดเพื่อให้ช่างติดต่อกลับครับ</div>
 
-                <!-- Form เริ่มต้นตรงนี้ แท็ก Div ปิดครบถ้วน 100% -->
-                <form id="repairForm" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">ชื่อ-นามสกุลของคุณ</label>
-                        <input type="text" id="cusName" required class="w-full bg-[#0b1329] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500" placeholder="เช่น สมชาย ใจดี">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">เบอร์โทรศัพท์ติดต่อ</label>
-                        <input type="tel" id="cusPhone" required class="w-full bg-[#0b1329] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500" placeholder="เช่น 0636718151">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">ประเภทเครื่องใช้ไฟฟ้า</label>
-                        <select id="deviceType" required class="w-full bg-[#0b1329] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-sky-500">
-                            <option value="">-- กรุณาเลือกรายการ --</option>
-                            <option value="ทีวี">ทีวี / โทรทัศน์ (TV)</option>
-                            <option value="เครื่องซักผ้า">เครื่องซักผ้า (Washing Machine)</option>
-                            <option value="ตู้เย็น">ตู้เย็น (Fridge)</option>
-                            <option value="แอร์">เครื่องปรับอากาศ / แอร์ (A/C)</option>
-                            <option value="พัดลม">พัดลม (Fan)</option>
-                            <option value="อื่นๆ">เครื่องใช้ไฟฟ้าอื่นๆ</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">อาการเสีย / รายละเอียดงาน</label>
-                        <textarea id="jobDetail" rows="3" required class="w-full bg-[#0b1329] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500" placeholder="เช่น แอร์ไม่เย็น หรือ ต้องการล้างเครื่องซักผ้า"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-300 mb-1">ที่อยู่ (ในจังหวัดสุรินทร์)</label>
-                        <input type="text" id="cusAddress" required class="w-full bg-[#0b1329] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500" placeholder="บ้านเลขที่, อำเภอ">
-                    </div>
-
-                    <button type="submit" class="w-full bg-sky-500 hover:bg-sky-400 text-white font-semibold text-sm py-3 px-4 rounded-xl transition-all shadow-md mt-2">
-                        ส่งข้อมูลนัดหมายช่าง
-                    </button>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer Section -->
-    <footer class="bg-[#0b1329] border-t border-gray-800 py-8 px-4 text-center mt-10">
-        <div class="container mx-auto max-w-3xl">
-            <div class="inline-block bg-sky-500/10 text-sky-400 font-medium px-4 py-1.5 rounded-full border border-sky-500/20 mb-6 text-xs">
-                <i class="fa-solid fa-location-dot mr-1"></i> รับในสุรินทร์ ทุกอำเภอ
-            </div>
-            
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
-                <a href="tel:0636718151" class="flex items-center gap-2 bg-[#1c2541] hover:bg-gray-800 text-sky-400 font-semibold px-5 py-3 rounded-xl border border-sky-500/20 text-sm w-full sm:w-auto justify-center">
-                    <i class="fa-solid fa-phone"></i>
-                    <span>โทร: 063-671-8151</span>
+            <form id="repairForm">
