@@ -4,91 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&K Repair App - ระบบงานซ่อมและออกบิล</title>
-    <!-- ใช้ Tailwind CSS Play CDN v3 ที่เสถียรที่สุด -->
-    <script src="https://tailwindcss.com"></script>
-    <!-- Font Awesome สำหรับไอคอน -->
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <!-- QR Code Generator -->
-    <script src="https://cloudflare.com"></script>
-    <!-- html2canvas สำหรับแปลงบิลเป็นรูปภาพเพื่อส่งใน Line -->
-    <script src="https://cloudflare.com"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { 
-                        primary: '#4F46E5', 
-                        success: '#10B981', 
-                        danger: '#EF4444' 
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- ระบบสไตล์แบบ Built-in ฝังในไฟล์ ไม่พึ่งพา CDN ภายนอก หน้าจอไม่แตกบนมือถือแน่นอน -->
+    <style>
+        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
+        body { bg-color: #f8fafc; background: #f8fafc; color: #334155; padding-bottom: 40px; }
+        
+        /* Navigation Bar */
+        .navbar { background: #ffffff; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
+        .nav-title { font-size: 18px; font-weight: bold; color: #4f46e5; }
+        .btn-add { background: #4f46e5; color: white; padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; }
+        
+        /* Main Container */
+        .container { max-w: 800px; margin: 20px auto; padding: 0 15px; }
+        .search-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; margin-bottom: 20px; font-size: 14px; outline: none; }
+        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #475569; }
+        
+        /* Job Grid & Cards */
+        .job-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media(min-width: 640px) { .job-grid { grid-template-columns: 1fr 1fr; } }
+        .job-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .job-id { font-family: monospace; font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .status-badge { font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 20px; }
+        .status-รับงาน { background: #fef3c7; color: #d97706; }
+        .status-กำลังซ่อม { background: #dbeafe; color: #2563eb; }
+        .status-ซ่อมเสร็จ { background: #d1fae5; color: #059669; }
+        .status-ส่งมอบแล้ว { background: #f1f5f9; color: #475569; }
+        .device-type { font-size: 10px; color: #4f46e5; font-weight: bold; text-transform: uppercase; }
+        .device-brand { font-size: 15px; font-weight: bold; margin-bottom: 5px; }
+        .job-issue { font-size: 13px; color: #64748b; margin-bottom: 12px; }
+        .card-details { border-top: 1px solid #f1f5f9; padding-top: 8px; font-size: 12px; color: #475569; line-height: 1.6; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 10px; }
+        .card-cost { font-size: 16px; font-weight: 900; color: #1e293b; }
+        .card-actions { display: flex; gap: 5px; }
+        .btn-action { padding: 6px 10px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
+        .btn-action:hover { background: #f1f5f9; }
+        
+        /* Modal Window Styles */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 16px; padding: 20px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 15px; }
+        .modal-title { font-size: 16px; font-weight: bold; }
+        .btn-close { background: none; border: none; font-size: 20px; color: #94a3b8; cursor: pointer; }
+        
+        /* Form Inputs */
+        .form-group { margin-bottom: 12px; }
+        .form-label { display: block; font-size: 11px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; background: white; }
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media(min-width: 480px) { .form-row { grid-template-columns: 1fr 1fr; } }
+        .form-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+        .btn-cancel { background: white; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Invoice Layout */
+        .invoice-box { border: 1px solid #cbd5e1; padding: 15px; border-radius: 10px; background: white; margin-bottom: 15px; }
+        .invoice-header { text-align: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; }
+        .invoice-shop-name { font-size: 13px; font-weight: bold; color: #1e293b; }
+        .invoice-shop-sub { font-size: 9px; color: #4f46e5; font-weight: bold; margin-top: 2px; }
+        .invoice-shop-phone { font-size: 10px; color: #64748b; margin-top: 4px; }
+        .invoice-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+        .invoice-table { background: #f8fafc; padding: 10px; border-radius: 8px; font-size: 11px; margin: 12px 0; border: 1px solid #e2e8f0; }
+        .invoice-table div { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .invoice-total { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; border-top: 1px solid #e2e8f0; padding-top: 8px; }
+        .invoice-qr-zone { text-align: center; margin-top: 12px; border-top: 1px dashed #e2e8f0; padding-top: 12px; display: flex; flex-direction: column; align-items: center; }
+        .qr-placeholder { font-size: 9px; color: #94a3b8; margin-top: 4px; }
+        .invoice-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-line { background: #06C755; color: white; border: none; font-size: 12px; font-weight: bold; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; text-align: center; text-decoration: none; }
+        .btn-img { background: #1e293b; color: white; border: none; font-size: 12px; font-weight: bold; padding: 10px; border-radius: 10px; cursor: pointer; }
+        
+        /* Helpers */
+        .empty-state { background: white; padding: 40px 15px; border-radius: 12px; border: 2px dashed #cbd5e1; text-align: center; color: #94a3b8; font-size: 13px; }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen">
+<body>
 
     <!-- Navigation Bar -->
-    <nav class="bg-white shadow-md border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-screwdriver-wrench text-primary text-xl"></i>
-                    <span class="text-lg font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">T&K Repair App</span>
-                </div>
-                <div>
-                    <button onclick="openModal('jobModal')" class="bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> เพิ่มงานซ่อมใหม่
-                    </button>
-                </div>
-            </div>
-        </div>
+    <nav class="navbar">
+        <div class="nav-title">T&K Repair App</div>
+        <button type="button" onclick="openModal('jobModal')" class="btn-add">+ เพิ่มงานซ่อมใหม่</button>
     </nav>
 
     <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
+    <div class="container">
         <!-- Search Section -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6">
-            <div class="relative w-full">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
-                <input type="text" id="searchInput" onkeyup="searchJobs()" placeholder="ค้นหาชื่อลูกค้า, รุ่นเครื่องใช้ไฟฟ้า, บาร์โค้ด..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
-            </div>
-        </div>
+        <input type="text" id="searchInput" onkeyup="searchJobs()" class="search-box" placeholder="ค้นหาชื่อลูกค้า, รุ่นเครื่องใช้ไฟฟ้า, บาร์โค้ด...">
 
         <!-- Grid Items Data List -->
-        <h2 class="text-base font-bold mb-3 text-slate-700 flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-slate-400"></i> รายการงานซ่อมทั้งหมดของร้าน
-        </h2>
-        <div id="jobList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- ข้อมูลจะถูกดึงมาแสดงที่นี่ผ่าน JavaScript -->
+        <h2 class="section-title">รายการงานซ่อมทั้งหมดของร้าน</h2>
+        <div id="jobList" class="job-grid">
+            <!-- ข้อมูลดึงมาแสดงด้วย JavaScript -->
         </div>
-    </main>
+    </div>
 
-    <!-- Modal: ลงทะเบียนและแก้ไขงานซ่อม (ถูกซ่อนไว้เริ่มต้น จะแสดงเมื่อกดปุ่มเพิ่มงาน) -->
-    <div id="jobModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                <h3 class="text-lg font-bold text-slate-800" id="modalTitle">ลงทะเบียนงานซ่อมใหม่</h3>
-                <button type="button" onclick="closeModal('jobModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- Modal: ลงทะเบียนและแก้ไขงานซ่อม -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">ลงทะเบียนงานซ่อมใหม่</h3>
+                <button type="button" onclick="closeModal('jobModal')" class="btn-close">&times;</button>
             </div>
-            <form id="jobForm" onsubmit="saveJob(event)" class="space-y-4 pt-3 text-sm">
+            <form id="jobForm" onsubmit="saveJob(event)">
                 <input type="hidden" id="jobId">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ชื่อลูกค้า</label>
-                        <input type="text" id="customerName" required class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">ชื่อลูกค้า</label>
+                        <input type="text" id="customerName" required class="form-control">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">เบอร์โทรศัพท์ลูกค้า</label>
-                        <input type="tel" id="customerPhone" required class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    <div class="form-group">
+                        <label class="form-label">เบอร์โทรศัพท์ลูกค้า</label>
+                        <input type="tel" id="customerPhone" required class="form-control">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ประเภทเครื่องใช้ไฟฟ้า</label>
-                        <select id="deviceType" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">ประเภทเครื่องใช้ไฟฟ้า</label>
+                        <select id="deviceType" class="form-control">
                             <option value="📺 TV REPAIR">📺 ทีวี / โทรทัศน์</option>
                             <option value="🧺 WASHING MACHINE">🧺 เครื่องซักผ้า</option>
                             <option value="❄️ FRIDGE REPAIR">❄️ ตู้เย็น / ตู้แช่</option>
@@ -97,48 +128,9 @@
                             <option value="🛠️ OTHER">🛠️ อุปกรณ์ไฟฟ้าอื่นๆ</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ระบุแบรนด์ / รุ่น / รายละเอียด</label>
-                        <input type="text" id="deviceBrand" required placeholder="เช่น Samsung 55 นิ้ว" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    <div class="form-group">
+                        <label class="form-label">ระบุแบรนด์ / รุ่น / รายละเอียด</label>
+                        <input type="text" id="deviceBrand" required placeholder="เช่น Samsung 55 นิ้ว" class="form-control">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">หมายเลขเครื่องประจำชิ้นงาน (Serial / Barcode)</label>
-                    <input type="text" id="barcode" placeholder="ระบุเลขซีเรียล หรือรหัสบาร์โค้ดเครื่องซ่อม" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">อาการเสียที่แจ้ง / รายการซ่อม</label>
-                    <textarea id="issue" rows="2" required placeholder="แจ้งอาการเสียอย่างละเอียด หรือระบุงานเปลี่ยนอะไหล่" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none"></textarea>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">สถานะความคืบหน้า</label>
-                        <select id="status" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
-                            <option value="รับงาน">📥 รับงานซ่อม</option>
-                            <option value="กำลังซ่อม">👨‍🔧 กำลังดำเนินการซ่อม</option>
-                            <option value="ซ่อมเสร็จ">✅ ซ่อมเสร็จเรียบร้อย</option>
-                            <option value="ส่งมอบแล้ว">📦 ส่งมอบคืนลูกค้าแล้ว</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">รวมค่าบริการและค่าอะไหล่ (บาท)</label>
-                        <input type="number" id="cost" value="0" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
-                    </div>
-                </div>
-                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                    <button type="button" onclick="closeModal('jobModal')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">ยกเลิก</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl bg-primary hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm">บันทึกข้อมูลงาน</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal: ใบเสร็จ / รายงานส่งลูกค้า -->
-    <div id="invoiceModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl relative border border-slate-100">
-            <button type="button" onclick="closeModal('invoiceModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            
-            <div id="printArea" class="bg-white p-3 rounded-xl border border-slate-100 space-y-4">
-                <div class="text-center pb-3 border-b-2 border-dashed border-slate-200">
-                    <h2 class="text-sm font-black text-slate-900 tracking-tight">T&K ELECTRICAL APPLIANCE REPAIR CENTER</h2>
-                    <p class="text-[9px] text-primary font-bold uppercase tracking-wider mt-0.5">One-stop service (สุรินทร์ ทุกอำเภอ)</p>
+                <div class="form-group">
