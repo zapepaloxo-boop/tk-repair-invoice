@@ -3,122 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Electrical Appliance Repair Center</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Prompt', sans-serif; background-color: #030712; color: #f1f5f9; line-height: 1.6; padding: 20px 12px; position: relative; }
-        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
-        
-        /* ปุ่มตั้งค่าลับสไตล์ซ่อนตัวสำหรับแอดมินช่างที่มุมขวาบน */
-        .secret-admin-trigger { position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 16px; color: #1e293b; cursor: pointer; transition: color 0.2s; padding: 5px; z-index: 999; }
-        .secret-admin-trigger:hover { color: #fbbf24; }
-        
-        /* Header สไตล์ Premium */
-        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #1f2937; margin-bottom: 25px; }
-        .logo-section { display: flex; align-items: center; gap: 12px; }
-        .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-        .logo-title h1 { font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
-        .logo-title p { font-size: 11px; color: #fbbf24; font-weight: 500; }
-        
-        /* แดชบอร์ดสรุปตัวเลขความคืบหน้าภาพรวมร้านสไตล์ SolarCRM */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
-        .stat-card { background: #111827; padding: 15px; border-radius: 16px; border: 1px solid #1f2937; text-align: left; }
-        .stat-card p { font-size: 11px; color: #9ca3af; }
-        .stat-card h3 { font-size: 20px; color: #ffffff; font-weight: 700; margin-top: 2px; }
-        
-        /* การจัดวางหน้าโครงสร้างฟังก์ชัน */
-        .panel { display: none; }
-        .panel.active { display: block; }
-        .main-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 768px) { .main-layout { grid-template-columns: 1fr 1fr; } }
-        
-        .premium-card { background: #111827; padding: 25px 20px; border-radius: 20px; border: 1px solid #1f2937; box-shadow: 0 10px 25px rgba(0,0,0,0.5); height: fit-content; }
-        .premium-card h2 { font-size: 16px; color: #ffffff; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .premium-card h2 span { color: #fbbf24; }
-        .premium-card > p { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
-        
-        .fg { margin-bottom: 15px; text-align: left; }
-        label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: 500; }
-        input, select, textarea { width: 100%; background: #030712; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; color: #ffffff; font-size: 13px; outline: none; transition: border 0.2s; }
-        input:focus, select:focus, textarea:focus { border-color: #fbbf24; }
-        
-        .btn-gold { width: 100%; background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #1e293b; border: none; border-radius: 10px; padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
-        .btn-gold:active { transform: scale(0.98); }
-        .btn-green { width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        
-        /* ส่วนแสดงผลใบเสนอราคาบิล */
-        .output-box { display: none; background: #030712; padding: 16px; border-radius: 12px; border: 1px solid #334155; margin-top: 15px; font-size: 13px; }
-        .bill-header { font-weight: bold; color: #fbbf24; border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; gap: 5px; }
-        .bill-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-        .status-tag { display: inline-block; padding: 4px 12px; border-radius: 50px; font-weight: bold; font-size: 11px; color: white; }
-        
-        /* ส่วนกล่องแชทโต้ตอบโหมดพรีเมียม */
-        .chat-container { display: flex; flex-direction: column; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; }
-        .chat-box { height: 160px; overflow-y: auto; background: #030712; border: 1px solid #334155; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
-        .msg-line { max-width: 80%; padding: 6px 10px; border-radius: 8px; font-size: 12px; word-break: break-all; }
-        .msg-admin { background: rgba(251, 191, 36, 0.15); color: #fbbf24; align-self: flex-start; border-left: 3px solid #fbbf24; }
-        .msg-client { background: rgba(56, 189, 248, 0.15); color: #38bdf8; align-self: flex-end; border-right: 3px solid #38bdf8; }
-        
-        /* ส่วนแสดงรายการงานฝั่งหลังบ้านแอดมิน */
-        #adminSectionWindow { display: none; border-color: #10b981; margin-top: 35px; background: #111827; }
-        .log-list { background: #030712; padding: 12px; border-radius: 12px; border: 1px solid #334155; margin-top: 12px; max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .log-item { background: #1e293b; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981; font-size: 12px; text-align: left; cursor: pointer; transition: background 0.2s; }
-        .log-item:hover { background: #2d3748; }
-        
-        .info-card { background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 16px; margin-top: 30px; text-align: left; font-size: 12px; }
-        .footer-btns { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
-        .footer-link { flex: 1; min-width: 140px; text-align: center; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: bold; }
-    </style>
+    <title>T&K Repair Cloud - ระบบงานซ่อมและออกบิล</title>
+    <!-- Tailwind CSS สำหรับดีไซน์ที่ทันสมัย -->
+    <script src="https://tailwindcss.com"></script>
+    <!-- Font Awesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <!-- QR Code Generator -->
+    <script src="https://cloudflare.com"></script>
+    <!-- HTML5-QRCode Scanner สำหรับสแกนผ่านกล้องมือถือ -->
+    <script src="https://unpkg.com"></script>
+    <!-- html2canvas สำหรับแปลงบิลเป็นรูปภาพเพื่อส่งใน Line -->
+    <script src="https://cloudflare.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#4F46E5', success: '#10B981', danger: '#EF4444' }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen">
 
-    <!-- ⚙️ ปุ่มตั้งค่าลับซ่อนเนียนอยู่ที่มุมขวาบนสุดสำหรับ Admin เข้าหลังบ้านช่าง -->
-    <button class="secret-admin-trigger" onclick="triggerAdminLogin()">⚙️</button>
-
-    <div class="container">
-        <!-- แถบเมนูหัวเว็บแดชบอร์ดสไตล์ SolarCRM -->
-        <header>
-            <div class="logo-section">
-                <div class="logo-icon">⚡</div>
-                <div class="logo-title">
-                    <h1>T&K ELECTRICAL APPLIANCE</h1>
-                    <p>SYSTEM REPAIR CENTER v2.0</p>
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench text-primary text-2xl"></i>
+                    <span class="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">T&K Repair Cloud</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="openModal('jobModal')" class="bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> เพิ่มงานซ่อมใหม่
+                    </button>
+                    <button onclick="startScanner()" class="bg-slate-800 hover:bg-slate-950 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-qrcode"></i> สแกนบาร์โค้ดเครื่อง
+                    </button>
                 </div>
             </div>
-            <div style="font-size: 11px; color: #9ca3af; background: #111827; padding: 6px 12px; border-radius: 8px; border: 1px solid #1f2937;">📍 จ.สุรินทร์</div>
-        </header>
+        </div>
+    </nav>
 
-        <!-- แดชบอร์ดวิเคราะห์สถิติตัวเลขภาพรวมหน้าร้าน -->
-        <div class="stats-grid">
-            <div class="stat-card"><p>📦 คิวงานแจ้งซ่อมทั้งหมด</p><h3 id="statTotal">0</h3></div>
-            <div class="stat-card"><p>🔧 กำลังดำเนินการซ่อม</p><h3 id="statProgress" style="color: #38bdf8;">0</h3></div>
-            <div class="stat-card"><p>✅ ซ่อมเสร็จสิ้นปิดงาน</p><h3 id="statSuccess" style="color: #10b981;">0</h3></div>
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Search and Status Section -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full md:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
+                <input type="text" id="searchInput" onkeyup="searchJobs()" placeholder="ค้นหาชื่อลูกค้า, รุ่นอุปกรณ์, หรือรหัสเครื่อง..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm">
+            </div>
+            <div id="dbStatus" class="text-xs font-medium text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle text-[8px] animate-ping text-emerald-500"></i> เชื่อมต่อฐานข้อมูล Cloud สำเร็จ
+            </div>
         </div>
 
-        <!-- 📱 ส่วนหลักฟังก์ชันการใช้งานของหน้าเว็บ -->
-        <div class="main-layout">
-            <!-- ส่วนที่ 1: กล่องล็อกอินเช็คความคืบหน้าและใบเสนอราคาวางบิลของฝั่งลูกค้า -->
-            <div class="premium-card" style="border-color: rgba(251, 191, 36, 0.3);">
-                <h2>🔍 ติดตามความคืบหน้า & <span>ตรวจสอบบิล</span></h2>
-                <p>ป้อนเบอร์โทรศัพท์และรหัสผ่านที่คุณตั้งไว้เพื่อเช็คคิวงานและแชทโต้ตอบกับช่าง</p>
-                <div class="fg"><label>📞 เบอร์โทรศัพท์เคลื่อนที่ (ID)</label><input type="tel" id="loginPhone" placeholder="กรอกเบอร์โทรของคุณ"></div>
-                <div class="fg"><label>🔑 รหัสผ่านเข้าใช้งาน (Password)</label><input type="password" id="loginPass" placeholder="กรอกรหัสผ่าน"></div>
-                <button type="button" class="btn-gold" onclick="loginTrack()">🔓 เข้าสู่ระบบตรวจสอบ</button>
-                
-                <div id="trackResult" class="output-box">
-                    <div class="bill-header">🧾 ข้อมูลใบวางบิล & ตั๋วงานซ่อม</div>
-                    <div class="bill-row"><span>📌 สถานะดำเนินการ:</span><div><span id="vStatus" class="status-tag">รอดำเนินการ</span></div></div>
-                    <div class="bill-row"><span>📅 วันที่ช่างรับเครื่องเข้าคลัง:</span><span id="vInDate" style="color:#fbbf24; font-weight: 500;">-</span></div>
-                    <div class="bill-row"><span>📺 ประเภทเครื่องใช้ไฟฟ้า:</span><span id="vType">-</span></div>
-                    <div class="bill-row"><span>💥 อาการเสียแจ้งซ่อม:</span><span id="vDetail">-</span></div>
-                    <div class="bill-row" style="border-top:1px dashed #334155; margin-top:8px; padding-top:8px; font-weight:bold; font-size: 14px;">
-                        <span>💵 ยอดรวมค่าวางบิลประเมินราคา:</span><span id="vPrice" style="color:#10b981;">0.00 บาท</span>
+        <!-- Camera Scanner Modal Overlay -->
+        <div id="scannerContainer" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+            <div class="bg-white p-6 rounded-2xl max-w-md w-full shadow-2xl relative">
+                <button onclick="stopScanner()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-camera"></i> สแกน QR Code / Barcode</h3>
+                <div id="reader" class="overflow-hidden rounded-xl bg-slate-100"></div>
+            </div>
+        </div>
+
+        <!-- Grid Items Data List -->
+        <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-slate-400"></i> รายการงานซ่อมของร้านทั้งหมด
+        </h2>
+        <div id="jobList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-full text-center py-12 text-slate-400">
+                <i class="fa-solid fa-circle-notch animate-spin text-2xl mb-2"></i>
+                <p>กำลังดึงข้อมูลเรียลไทม์จาก Cloud เซิร์ฟเวอร์...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: ลงทะเบียนและแก้ไขงานซ่อม -->
+    <div id="jobModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 class="text-xl font-bold text-slate-800" id="modalTitle">ลงทะเบียนงานซ่อมใหม่</h3>
+                <button onclick="closeModal('jobModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form id="jobForm" onsubmit="saveJob(event)" class="space-y-4 pt-4">
+                <input type="hidden" id="jobId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ชื่อลูกค้า</label>
+                        <input type="text" id="customerName" required class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
                     </div>
-                    
-                    <!-- ช่องแชทคุยออนไลน์ระหว่างลูกค้ากับช่างแอดมิน -->
-                    <div class="chat-container">
-                        <div class="bill-header">💬 แชทสอบถามพูดคุยออนไลน์กับช่าง</div>
-                        <div id="clientChatBox" class="chat-box"></div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">เบอร์โทรศัพท์ลูกค้า</label>
+                        <input type="tel" id="customerPhone" required class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ประเภทเครื่องใช้ไฟฟ้า</label>
+                        <select id="deviceType" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                            <option value="📺 TV REPAIR">📺 ทีวี / โทรทัศน์</option>
+                            <option value="🧺 WASHING MACHINE">🧺 เครื่องซักผ้า</option>
+                            <option value="❄️ FRIDGE REPAIR">❄️ ตู้เย็น / ตู้แช่</option>
+                            <option value="🍃 A/C SERVICE">🍃 แอร์ / เครื่องปรับอากาศ</option>
+                            <option value="💨 FAN REPAIR">💨 พัดลม</option>
+                            <option value="🛠️ OTHER">🛠️ อุปกรณ์ไฟฟ้าอื่นๆ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ระบุแบรนด์ / รุ่น / รายละเอียด</label>
+                        <input type="text" id="deviceBrand" required placeholder="เช่น Samsung 55 นิ้ว / ฝาหน้า LG 12kg" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">หมายเลขเครื่องประจำชิ้นงาน (Serial / Barcode เพื่อใช้สแกน)</label>
+                    <input type="text" id="barcode" placeholder="ระบุเลขซีเรียล หรือแสกนบาร์โค้ดสินค้าเพื่อบันทึก" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">อาการเสียที่แจ้ง / รายการซ่อม</label>
+                    <textarea id="issue" rows="2" required placeholder="แจ้งอาการเสียอย่างละเอียด หรือระบุงานเปลี่ยนอะไหล่ชิ้นไหน" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">สถานะความคืบหน้า</label>
+                        <select id="status" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none bg-white">
+                            <option value="รับงาน">📥 รับงานซ่อม</option>
+                            <option value="กำลังซ่อม">👨‍🔧 กำลังดำเนินการซ่อม</option>
+                            <option value="ซ่อมเสร็จ">✅ ซ่อมเสร็จเรียบร้อย</option>
+                            <option value="ส่งมอบแล้ว">📦 ส่งมอบคืนลูกค้าแล้ว</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">รวมค่าบริการและค่าอะไหล่ (บาท)</label>
+                        <input type="number" id="cost" value="0" class="w-full p-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                </div>
