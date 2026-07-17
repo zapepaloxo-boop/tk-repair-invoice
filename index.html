@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&K Repair Cloud - ระบบงานซ่อมและออกบิล</title>
-    <!-- ใช้ Tailwind CSS Play CDN v3 ที่เสถียรที่สุดสำหรับระบบ WebApp เดี่ยวบนมือถือ -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>T&K Repair App - ระบบงานซ่อมและออกบิล</title>
+    <!-- ใช้ Tailwind CSS Play CDN v3 ที่เสถียรที่สุด -->
+    <script src="https://tailwindcss.com"></script>
     <!-- Font Awesome สำหรับไอคอน -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <!-- QR Code Generator -->
     <script src="https://cloudflare.com"></script>
-    <!-- HTML5-QRCode Scanner สำหรับสแกนผ่านกล้องมือถือ -->
-    <script src="https://unpkg.com"></script>
     <!-- html2canvas สำหรับแปลงบิลเป็นรูปภาพเพื่อส่งใน Line -->
     <script src="https://cloudflare.com"></script>
     
@@ -37,14 +35,11 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-screwdriver-wrench text-primary text-xl"></i>
-                    <span class="text-lg font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">T&K Repair Cloud</span>
+                    <span class="text-lg font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">T&K Repair App</span>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="openModal('jobModal')" class="bg-primary hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center gap-1">
-                        <i class="fa-solid fa-plus"></i> เพิ่มงาน
-                    </button>
-                    <button onclick="startScanner()" class="bg-slate-800 hover:bg-slate-950 text-white px-3 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center gap-1">
-                        <i class="fa-solid fa-qrcode"></i> สแกนเครื่อง
+                <div>
+                    <button onclick="openModal('jobModal')" class="bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> เพิ่มงานซ่อมใหม่
                     </button>
                 </div>
             </div>
@@ -54,23 +49,11 @@
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
-        <!-- Search and Status Section -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between">
-            <div class="relative w-full sm:w-80">
+        <!-- Search Section -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6">
+            <div class="relative w-full">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
-                <input type="text" id="searchInput" onkeyup="searchJobs()" placeholder="ค้นหาชื่อลูกค้า, รุ่น, บาร์โค้ด..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
-            </div>
-            <div id="dbStatus" class="w-full sm:w-auto text-center text-xs font-medium text-emerald-600 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-circle text-[8px] animate-ping text-emerald-500"></i> เชื่อมต่อฐานข้อมูล Cloud สำเร็จ
-            </div>
-        </div>
-
-        <!-- Camera Scanner Modal Overlay -->
-        <div id="scannerContainer" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <div class="bg-white p-5 rounded-2xl max-w-md w-full shadow-2xl relative">
-                <button onclick="stopScanner()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-                <h3 class="text-base font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-camera"></i> สแกน QR Code / Barcode</h3>
-                <div id="reader" class="overflow-hidden rounded-xl bg-slate-100"></div>
+                <input type="text" id="searchInput" onkeyup="searchJobs()" placeholder="ค้นหาชื่อลูกค้า, รุ่นเครื่องใช้ไฟฟ้า, บาร์โค้ด..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
             </div>
         </div>
 
@@ -79,19 +62,16 @@
             <i class="fa-solid fa-list-check text-slate-400"></i> รายการงานซ่อมทั้งหมดของร้าน
         </h2>
         <div id="jobList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="col-span-full text-center py-12 text-slate-400">
-                <i class="fa-solid fa-circle-notch animate-spin text-2xl mb-2"></i>
-                <p class="text-xs">กำลังดึงข้อมูลเรียลไทม์จาก Cloud เซิร์ฟเวอร์...</p>
-            </div>
+            <!-- ข้อมูลจะถูกดึงมาแสดงที่นี่ผ่าน JavaScript -->
         </div>
     </main>
 
-    <!-- Modal: ลงทะเบียนและแก้ไขงานซ่อม -->
+    <!-- Modal: ลงทะเบียนและแก้ไขงานซ่อม (ถูกซ่อนไว้เริ่มต้น จะแสดงเมื่อกดปุ่มเพิ่มงาน) -->
     <div id="jobModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center pb-3 border-b border-slate-100">
                 <h3 class="text-lg font-bold text-slate-800" id="modalTitle">ลงทะเบียนงานซ่อมใหม่</h3>
-                <button onclick="closeModal('jobModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button type="button" onclick="closeModal('jobModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <form id="jobForm" onsubmit="saveJob(event)" class="space-y-4 pt-3 text-sm">
                 <input type="hidden" id="jobId">
@@ -124,7 +104,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">หมายเลขเครื่องประจำชิ้นงาน (Serial / Barcode)</label>
-                    <input type="text" id="barcode" placeholder="ระบุเลขซีเรียล หรือแสกนบาร์โค้ดเพื่อบันทึก" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    <input type="text" id="barcode" placeholder="ระบุเลขซีเรียล หรือรหัสบาร์โค้ดเครื่องซ่อม" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">อาการเสียที่แจ้ง / รายการซ่อม</label>
@@ -142,3 +122,23 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">รวมค่าบริการและค่าอะไหล่ (บาท)</label>
+                        <input type="number" id="cost" value="0" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeModal('jobModal')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">ยกเลิก</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-primary hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm">บันทึกข้อมูลงาน</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: ใบเสร็จ / รายงานส่งลูกค้า -->
+    <div id="invoiceModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl relative border border-slate-100">
+            <button type="button" onclick="closeModal('invoiceModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div id="printArea" class="bg-white p-3 rounded-xl border border-slate-100 space-y-4">
+                <div class="text-center pb-3 border-b-2 border-dashed border-slate-200">
+                    <h2 class="text-sm font-black text-slate-900 tracking-tight">T&K ELECTRICAL APPLIANCE REPAIR CENTER</h2>
+                    <p class="text-[9px] text-primary font-bold uppercase tracking-wider mt-0.5">One-stop service (สุรินทร์ ทุกอำเภอ)</p>
